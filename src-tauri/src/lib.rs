@@ -10,6 +10,7 @@ mod formatting_rules;
 mod history;
 mod http_api;
 mod llm;
+mod medical;
 mod model;
 mod onboarding;
 mod overlay;
