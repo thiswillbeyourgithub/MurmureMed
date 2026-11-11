@@ -311,6 +311,10 @@ pub fn run() {
             app.manage(SmartMicState::new());
             app.manage(utils::enigo_session::EnigoState::default());
 
+            // MurmureMed: parse the medical rules now, not on the first transcription
+            let medical_handle = app.handle().clone();
+            std::thread::spawn(move || crate::medical::init(&medical_handle));
+
             let startup_handle = app.handle().clone();
             std::thread::spawn(move || {
                 // Open `/dev/uinput` before the model loads, holding the
@@ -511,6 +515,10 @@ pub fn run() {
             get_formatting_settings,
             set_formatting_settings,
             validate_regex,
+            get_medical_rule_edits,
+            set_medical_rule_edits,
+            search_medical_rules,
+            preview_medical_fixes,
             set_log_level,
             set_keep_recordings,
             set_remove_hesitations,

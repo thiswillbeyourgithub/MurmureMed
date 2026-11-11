@@ -14,19 +14,25 @@ fn pattern(core: &str, titles: &[&str]) -> String {
 }
 
 fn rules(list: &[(String, &str, &[&str])], always: &[u32]) -> DrugRules {
-    let rules: Vec<(String, String)> = list
+    // A rule without anchor words gets a variant that cannot be anchored.
+    let jsonl: Vec<String> = list
         .iter()
-        .map(|(p, r, _)| (p.clone(), r.to_string()))
+        .enumerate()
+        .map(|(i, (pattern, replacement, words))| {
+            let variants: Vec<String> = if always.contains(&(i as u32)) {
+                vec!["l'a.b".to_string()]
+            } else {
+                words.iter().map(|w| w.to_string()).collect()
+            };
+            serde_json::json!({"pattern": pattern, "replacement": replacement, "variants": variants})
+                .to_string()
+        })
         .collect();
-    let mut anchors: HashMap<String, Vec<u32>> = HashMap::new();
-    for (i, (_, _, words)) in list.iter().enumerate() {
-        for w in *words {
-            anchors.entry(w.to_string()).or_default().push(i as u32);
-        }
-    }
-    let json =
-        serde_json::json!({"format": 1, "rules": rules, "anchors": anchors, "always": always});
-    DrugRules::from_json(&json.to_string()).unwrap()
+    DrugRules::new(Arc::new(Bundled::from_jsonl(&[&jsonl.join("\n")])), &[])
+}
+
+fn bundled() -> DrugRules {
+    DrugRules::new(Bundled::shared(), &[])
 }
 
 #[test]
@@ -129,11 +135,94 @@ fn fold_strips_accents_and_lowercases() {
     assert_eq!(fold("Médicament ÉTÉ"), "medicament ete");
 }
 
+fn mirtazapine_base() -> Arc<Bundled> {
+    let rule = serde_json::json!({
+        "pattern": pattern("m[iy]rtazapine", &["docteur "]),
+        "replacement": "mirtazapine",
+        "variants": ["myrtazapine"],
+    });
+    Arc::new(Bundled::from_jsonl(&[&rule.to_string()]))
+}
+
+fn edit(original: Option<String>, core: &str, replacement: &str, enabled: bool) -> RuleEdit {
+    RuleEdit {
+        original,
+        core: core.to_string(),
+        replacement: replacement.to_string(),
+        enabled,
+    }
+}
+
+#[test]
+fn edits_disable_change_and_add_rules() {
+    let base = mirtazapine_base();
+    let original = Some(pattern("m[iy]rtazapine", &["docteur "]));
+
+    let disabled = DrugRules::new(
+        base.clone(),
+        &[edit(original.clone(), "m[iy]rtazapine", "x", false)],
+    );
+    assert_eq!(disabled.apply("sous myrtazapine"), "sous myrtazapine");
+
+    let renamed = DrugRules::new(
+        base.clone(),
+        &[edit(original.clone(), "m[iy]rtazapine", "Norset", true)],
+    );
+    assert_eq!(renamed.apply("sous myrtazapine"), "sous Norset");
+
+    // A new core is no longer under the bundled anchor, yet it runs, and
+    // keeps the bundled rule's title exclusions.
+    let new_core = DrugRules::new(
+        base.clone(),
+        &[edit(original, "mirta", "mirtazapine", true)],
+    );
+    assert_eq!(new_core.apply("sous mirta"), "sous mirtazapine");
+    assert_eq!(new_core.apply("docteur mirta"), "docteur mirta");
+
+    // Added rules run before the bundled ones, on word boundaries.
+    let added = DrugRules::new(base, &[edit(None, "dupont", "Dupond", true)]);
+    assert_eq!(
+        added.apply("Dupont sous myrtazapine"),
+        "Dupond sous mirtazapine"
+    );
+    assert_eq!(added.apply("dupontel"), "dupontel");
+    assert_eq!(added.apply("Dupont"), added.apply_naive("Dupont"));
+}
+
+#[test]
+fn invalid_or_stale_edits_are_ignored() {
+    let base = mirtazapine_base();
+    let edits = [
+        edit(
+            Some(pattern("m[iy]rtazapine", &["docteur "])),
+            "(",
+            "x",
+            true,
+        ),
+        edit(Some("no longer bundled".to_string()), "a", "b", true),
+        edit(None, "(?<=a)b", "c", true),
+    ];
+    let rules = DrugRules::new(base, &edits);
+    assert_eq!(rules.apply("sous myrtazapine ab"), "sous mirtazapine ab");
+    assert!(validate_edit(&edits[0]).is_err());
+    assert!(validate_edit(&edits[2]).is_err());
+    assert!(validate_edit(&edit(None, "a", "\u{1b}[31m", true)).is_err());
+}
+
+#[test]
+fn search_finds_rules_by_right_or_misheard_word() {
+    let base = mirtazapine_base();
+    assert_eq!(base.search("Mirtazapine", 10).len(), 1);
+    assert_eq!(base.search("sous myrtazapine", 10).len(), 1);
+    assert!(base.search("paracetamol", 10).is_empty());
+    assert!(base.search("  ", 10).is_empty());
+}
+
 /// Outputs of ParakeetWeb's `applyDrugRules` (JavaScript) on real
 /// transcriptions, with the bundled rules.
 #[test]
 fn bundled_rules_match_parakeetweb() {
-    let r = DrugRules::bundled().expect("bundled rules load");
+    let r = bundled();
     let cases = [
         ("On atteint la dose maximale avec un comprimé de quatre mg de respéridone par jour.", "On atteint la dose maximale avec un comprimé de quatre mg de rispéridone par jour."),
         ("On réduit le selecoxyb à une gélule de cent mg par jour compte tenu de l'âge du patient.", "On réduit le célécoxib à une gélule de cent mg par jour compte tenu de l'âge du patient."),
@@ -155,8 +244,10 @@ fn bundled_rules_match_parakeetweb() {
 #[test]
 #[ignore]
 fn every_bundled_rule_compiles() {
-    let r = DrugRules::bundled().expect("bundled rules load");
-    let unusable: Vec<usize> = (0..r.len()).filter(|i| r.regex(*i).is_none()).collect();
+    let r = bundled();
+    let unusable: Vec<u32> = (0..r.len() as u32)
+        .filter(|i| r.rule(*i).and_then(Rule::regex).is_none())
+        .collect();
     assert!(unusable.is_empty(), "unusable rules: {unusable:?}");
 }
 
@@ -169,7 +260,7 @@ fn bundled_rules_match_parakeetweb_corpus() {
     let Ok(path) = std::env::var("MURMUREMED_DRUG_PARITY") else {
         return;
     };
-    let r = DrugRules::bundled().expect("bundled rules load");
+    let r = bundled();
     let mut diffs = 0;
     let mut total = 0;
     for line in std::fs::read_to_string(path).unwrap().lines() {
