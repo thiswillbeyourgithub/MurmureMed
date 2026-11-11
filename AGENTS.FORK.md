@@ -35,15 +35,15 @@ Even if there is nothing new, update the date so we know the check happened.
 
 ## 4. Branching model
 
-Branches are created only with the user's approval.
+Branches are created only with the user's approval. **Never open a pull request upstream**: only the user does that, by hand.
 
-- `main`: what we release. Equal to upstream + fork meta files (README, this file) + every finished feature, each merged in.
-- `feat/<name>`: **one feature per branch**, branched from the upstream commit we last synced to (not from `main`), so that `git diff upstream/main...feat/<name>` shows exactly that feature and nothing else. This makes each feature:
-    - easy to review and revert (merged into `main` with `git merge --no-ff`, one merge commit per feature),
+- `medmain`: our default branch, what we release (named so it is never confused with `upstream/main`). Equal to upstream + fork meta files (README, this file) + every finished feature, each merged in.
+- `feat/<name>`: **one feature per branch**, branched from the upstream commit we last synced to (not from `medmain`), so that `git diff upstream/main...feat/<name>` shows exactly that feature and nothing else. This makes each feature:
+    - easy to review and revert (merged into `medmain` with `git merge --no-ff`, one merge commit per feature),
     - easy to benchmark in isolation (build `upstream/main` vs `feat/<name>` and compare),
-    - easy to propose upstream (open a PR straight from the branch).
+    - easy for the user to propose upstream (a PR straight from the branch).
 - If a feature depends on another one (example: the medical phrase list needs the new phrase boosting engine), branch it from its parent feature branch and note the dependency in the table below.
-- Syncing upstream: `git merge upstream/main` into `main` (never rebase `main`, it is published). Feature branches not yet merged: rebase them onto `upstream/main` (or merge if already shared).
+- Syncing upstream: `git merge upstream/main` into `medmain` (never rebase `medmain`, it is published). Feature branches not yet merged: rebase them onto `upstream/main` (or merge if already shared).
 - `git rerere` is enabled locally (`git config rerere.enabled true`) so a conflict resolved once is resolved automatically next time.
 - Recurring conflicts and how to resolve them:
     - `README.md`: always keep ours.
@@ -55,7 +55,7 @@ Branches are created only with the user's approval.
 | --- | --- | --- | --- | --- |
 | UltiMed fine-tune as default model | `feat/ultimed-model` | | planned | |
 | Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | planned | |
-| Compile regex once, not on every transcription | `feat/regex-compile-once` | | done, not merged (11x to 15x faster rule application) | candidate |
+| Compile regex once, not on every transcription | `feat/regex-compile-once` | | merged (11x to 15x faster rule application) | not planned (upstream is fine with compiling per transcription for its short lists, see #498) |
 | Precompiled medical regex list, separate from user rules | `feat/medical-regex` | `feat/regex-engine`, `feat/regex-compile-once` | planned | |
 | ParakeetWeb phrase boosting engine | `feat/phrase-boosting` | | planned | |
 | French medical phrase boosting list | `feat/medical-phrase-list` | `feat/phrase-boosting` | planned | |
