@@ -54,9 +54,9 @@ Branches are created only with the user's approval. **Never open a pull request 
 | Feature | Branch | Depends on | Status | Upstream PR |
 | --- | --- | --- | --- | --- |
 | UltiMed fine-tune as default model | `feat/ultimed-model` | | planned | |
-| Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | planned | |
+| Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | not needed for now (the medical rules' only lookbehind, the title exclusions, is handled in code; InterHop rules have none) | |
 | Compile regex once, not on every transcription | `feat/regex-compile-once` | | merged (11x to 15x faster rule application) | not planned (upstream is fine with compiling per transcription for its short lists, see #498) |
-| Precompiled medical regex list, separate from user rules | `feat/medical-regex` | `feat/regex-engine`, `feat/regex-compile-once` | planned | |
+| Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
 | ParakeetWeb phrase boosting engine | `feat/phrase-boosting` | | planned | |
 | French medical phrase boosting list | `feat/medical-phrase-list` | `feat/phrase-boosting` | planned | |
 | Branding (name, icon, explicit fork credit), toggles for extra regex and phrase boosting | `feat/branding` | | planned | |
@@ -64,7 +64,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 
 Update this table when a branch is created, merged, or proposed upstream.
 
-Note for `feat/medical-regex`: the `feat/regex-compile-once` cache (capped at 4096 patterns, one compiled `Regex` per rule) is sized for upstream's short hand-edited lists. The ~30,000 medical rules need their own structure (precompiled once at load, compact memory footprint), not this cache.
+Note for `feat/medical-regex`: the `feat/regex-compile-once` cache (capped at 4096 patterns) is sized for user rules, including the 138 InterHop rules seeded by default. The ~42,000 drug and term rules do not use it: `src-tauri/src/medical/` indexes them by anchor word at startup and compiles each rule lazily, the first time a text could match it.
 
 ## 5. Versioning
 
