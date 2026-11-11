@@ -1,3 +1,5 @@
+> **MurmureMed fork:** read and follow AGENTS.FORK.md first, it takes precedence over this file: @AGENTS.FORK.md
+
 # Murmure AI Development Assistant Guidelines
 
 ## 1. Role and Persona
