@@ -1,3 +1,12 @@
+> [!CAUTION]
+> # ⚠️ Fork en cours de développement : PAS ENCORE UTILISABLE ⚠️
+>
+> **Ce fork n'est pas encore prêt et ne doit pas être utilisé.**
+>
+> Son objectif est d'optimiser Murmure pour la dictée de texte en français à partir de l'audio. Tant que ce bandeau est présent, considérez ce dépôt comme un travail en cours, instable et non fonctionnel.
+>
+> Pour une version utilisable, rendez-vous sur le [projet Murmure original](https://github.com/Kieirra/murmure).
+
 # Murmure
 
 A privacy-first, open-source speech-to-text application that runs entirely on your machine, powered by a neural network via NVIDIA’s [Parakeet TDT 0.6B v3 model](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) for fast, local transcription. Murmure turns your voice into text with no internet connection and zero data collection, and supports 25 European languages.
