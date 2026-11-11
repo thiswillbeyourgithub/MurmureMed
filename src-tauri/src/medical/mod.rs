@@ -6,6 +6,7 @@
 
 mod drug_rules;
 mod interhop;
+pub mod phrase_list;
 mod store;
 
 pub use drug_rules::{validate_edit, RuleEdit, RuleView};
