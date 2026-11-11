@@ -34,6 +34,7 @@ impl ParakeetEngine {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::audio::pipeline::pad_with_silence;
     use crate::engine::transcription_engine::TranscriptionEngine;
     use std::path::Path;
 
@@ -41,7 +42,9 @@ mod tests {
     /// (one path per line) in MURMUREMED_BENCH_WAVS and prints one
     /// `HYP<TAB>path<TAB>text` line each. Optional boosting, combinable:
     /// MURMUREMED_BOOST_WORDS_FILE (dictionary words, one per line) and
-    /// MURMUREMED_BOOST_LIST (a ParakeetWeb phrase list).
+    /// MURMUREMED_BOOST_LIST (a ParakeetWeb phrase list). Clips are padded
+    /// with silence like the app does: unpadded, the model drifts into
+    /// English (WER 50% instead of 18% on French medical clips).
     /// `MURMUREMED_MODEL_DIR=... MURMUREMED_BENCH_WAVS=... cargo test --release
     /// --lib phrase_boost::model::tests::bench_transcribe -- --ignored --nocapture`
     #[test]
@@ -69,7 +72,7 @@ mod tests {
                 .map(|s| s.expect("sample") as f32 / 32768.0)
                 .collect();
             let result = engine
-                .transcribe_samples(samples, None)
+                .transcribe_samples(pad_with_silence(&samples, 16000), None)
                 .expect("transcribe");
             println!("HYP\t{}\t{}", wav, result.text);
         }
