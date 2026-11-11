@@ -43,4 +43,19 @@ python sync-interhop-rules.py [path/to/murmure-regex]
 cd .. && cargo test --lib interhop
 ```
 
+## phrase-boosting/
+
+French medical phrase boosting list (~77,000 phrases: drugs, medical terms, LoRN bacteria names, dosage units), loaded into the decoder at model load by `src-tauri/src/medical/phrase_list.rs`. During decoding it nudges the model toward these phrases (ParakeetWeb's trie engine, `src-tauri/src/engine/phrase_boost/`), on top of the user dictionary.
+
+- Copy of ParakeetWeb's `phrase_boosting/french_medical.txt` (https://github.com/thiswillbeyourgithub/parakeet_web) with only its first line, the defaults line, replaced by MurmureMed's tuning (`#!commitment 0` and min-p 0.01, chosen by the benchmark in `AGENTS.FORK.md`). The source commit and SHA-256 are in `phrase-boosting/PROVENANCE`. Do not edit it here: list improvements go to ParakeetWeb.
+- License: AGPL-3.0, like ParakeetWeb and Murmure. TODO: confirm the licenses of the data the list is generated from (ultimate_french_medical_dataset sources, LPSN names).
+
+### Refresh
+
+```bash
+# from a local clone of ParakeetWeb (default: ../../../parakeet_web)
+./sync-phrase-list.sh [path/to/parakeet_web]
+cd .. && cargo test --lib phrase_list
+```
+
 Set up with Claude Code.
