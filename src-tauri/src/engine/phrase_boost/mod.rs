@@ -4,12 +4,13 @@
 //! continuing a listed phrase.
 
 pub mod list;
+pub mod model;
 pub mod trie;
 
 use tokenizers::Tokenizer;
 
 use super::helpers::tokenize_word_to_ids;
-use list::BoostPhrase;
+use list::{expand_augmentations, parse_boost_list, BoostPhrase};
 pub use trie::{BoostingTrie, EncodedPhrase, NodeId};
 
 /// Tokenize every spelling. Spellings that tokenize to nothing or contain an
@@ -34,15 +35,112 @@ pub fn encode_phrases(
     (encoded, skipped)
 }
 
+/// Parse a ParakeetWeb list, expand its spellings and build its trie.
+/// `None` when nothing in it can be emitted by the decoder.
+pub fn build_trie(raw: &str, tokenizer: &Tokenizer) -> Option<BoostingTrie> {
+    let list = parse_boost_list(raw);
+    for warning in &list.warnings {
+        log::warn!("phrase list: {warning}");
+    }
+    let (encoded, skipped) = encode_phrases(&expand_augmentations(&list, ""), tokenizer);
+    if !skipped.is_empty() {
+        log::warn!(
+            "phrase list: {} unencodable spelling(s) skipped",
+            skipped.len()
+        );
+    }
+    let trie = match list.commitment {
+        Some(commitment) => BoostingTrie::with_commitment(&encoded, commitment),
+        None => BoostingTrie::new(&encoded),
+    };
+    log::info!(
+        "Phrase list boosting: {} phrase(s), {} spelling(s)",
+        list.phrases.len(),
+        encoded.len()
+    );
+    (!trie.is_empty()).then_some(trie)
+}
+
+/// Add the trie's bonuses for the active set to `scores`, a copy of `logits`
+/// that may already carry other boosts. Blank is never boosted, so a phrase
+/// can neither force nor suppress a blank.
+pub fn add_phrase_bonuses(
+    trie: &BoostingTrie,
+    logits: &[f32],
+    active: &[NodeId],
+    blank_idx: i32,
+    scores: &mut [f32],
+) {
+    for (id, bonus) in trie.boosts(logits, active) {
+        if id as i32 != blank_idx {
+            scores[id] += bonus;
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::list::{expand_augmentations, parse_boost_list};
+    use super::list::DEFAULT_BOOST_MIN_P;
     use super::*;
 
     fn bundled_tokenizer() -> Option<Tokenizer> {
         let path =
             std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../resources/tokenizer.json");
         Tokenizer::from_file(path).ok()
+    }
+
+    fn bonuses_of(ids: Vec<i32>, logits: &[f32], blank_idx: i32) -> Vec<f32> {
+        let trie = BoostingTrie::new(&[EncodedPhrase {
+            ids,
+            weight: 1.0,
+            minp: DEFAULT_BOOST_MIN_P,
+        }]);
+        let mut scores = logits.to_vec();
+        add_phrase_bonuses(&trie, logits, &trie.start(), blank_idx, &mut scores);
+        scores
+    }
+
+    #[test]
+    fn plausible_listed_token_gets_its_bonus() {
+        // Single-token phrase, weight 1: token 1 goes from 0.6 to 1.6 and beats token 0.
+        assert_eq!(
+            bonuses_of(vec![1], &[1.0, 0.6, 0.0], 2),
+            vec![1.0, 1.6, 0.0]
+        );
+    }
+
+    #[test]
+    fn token_below_min_p_is_not_boosted() {
+        // ln(0.1) = -2.3: logit 0.0 is too far below 5.0.
+        assert_eq!(
+            bonuses_of(vec![1], &[5.0, 0.0, -1.0], 2),
+            vec![5.0, 0.0, -1.0]
+        );
+    }
+
+    #[test]
+    fn blank_is_never_boosted() {
+        assert_eq!(
+            bonuses_of(vec![2], &[1.0, 0.0, 0.9], 2),
+            vec![1.0, 0.0, 0.9]
+        );
+    }
+
+    #[test]
+    fn build_trie_applies_the_commitment_directive() {
+        let Some(tokenizer) = bundled_tokenizer() else {
+            return;
+        };
+        // syntocinon is 4 tokens: first-token bonus 1/4 by default, 1 with commitment 0.
+        let first_bonus = |raw: &str| {
+            let trie = build_trie(raw, &tokenizer).expect("trie");
+            let mut scores = vec![0.0; 8192];
+            add_phrase_bonuses(&trie, &vec![0.0; 8192], &trie.start(), -1, &mut scores);
+            scores[4208]
+        };
+        assert_eq!(first_bonus("syntocinon:1::s"), 0.25);
+        assert_eq!(first_bonus("#!commitment 0\nsyntocinon:1::s"), 1.0);
+        assert!(build_trie("東京", &tokenizer).is_none());
     }
 
     #[test]
