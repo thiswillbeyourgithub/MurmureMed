@@ -77,4 +77,5 @@ Caveat: Windows Installer ignores the fourth number when deciding whether an MSI
 ## 6. Other
 
 - Personal notes and reminders live in `TODO.local.md` (gitignored).
+- Machine-specific notes (which OSes the maintainer can test on) live in `AGENTS.local.md` (gitignored): read it if present.
 - When writing docs, mention which coding harness was used (Claude Code or pi).
