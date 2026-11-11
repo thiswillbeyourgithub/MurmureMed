@@ -2,9 +2,10 @@
 //! (written with Claude Code) so the upstream engine files only gain the
 //! `phrase_trie` field and the decode hook.
 //!
-//! Hybrid boosting, chosen from a benchmark on 200 UltiMed validation clips:
-//! upstream's dictionary boost wins on short user dictionaries, but degrades
-//! the WER with a ~77k phrase list, where this trie lowers it.
+//! Hybrid boosting, chosen from a benchmark on 200 UltiMed validation clips
+//! (see AGENTS.FORK.md): upstream's dictionary boost is strong and rank gated,
+//! right for a few user words but raising the WER with a ~77k phrase list,
+//! where this gentler, min-p gated trie lowers it.
 
 use super::build_trie;
 use crate::engine::types::{ParakeetEngine, ParakeetModel};

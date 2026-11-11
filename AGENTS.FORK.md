@@ -57,7 +57,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 | Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | not needed for now (the medical rules' only lookbehind, the title exclusions, is handled in code; InterHop rules have none) | |
 | Compile regex once, not on every transcription | `feat/regex-compile-once` | | merged (11x to 15x faster rule application) | not planned (upstream is fine with compiling per transcription for its short lists, see #498) |
 | Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
-| ParakeetWeb phrase boosting engine | `feat/phrase-boosting` (from `medmain`) | | in progress | |
+| ParakeetWeb phrase boosting engine (hybrid: upstream boost for the user dictionary, ParakeetWeb trie for phrase lists, larger bonus wins where they overlap) | `feat/phrase-boosting` (from `medmain`) | | done, not merged (engine only, app hookup comes with the list) | |
 | French medical phrase boosting list | `feat/medical-phrase-list` | `feat/phrase-boosting` | planned | |
 | Branding (name, icon, explicit fork credit), toggles for extra regex and phrase boosting | `feat/branding` | | planned | |
 | Remote microphone through an internet relay (or iroh) | `feat/remote-mic-relay` | | idea | |
@@ -65,6 +65,8 @@ Branches are created only with the user's approval. **Never open a pull request 
 Update this table when a branch is created, merged, or proposed upstream.
 
 Note for `feat/medical-regex`: the `feat/regex-compile-once` cache (capped at 4096 patterns) is sized for user rules, including the 138 InterHop rules seeded by default. The ~42,000 drug and term rules do not use it: `src-tauri/src/medical/` indexes them by anchor word at startup and compiles each rule lazily, the first time a text could match it.
+
+Note for `feat/phrase-boosting`: benchmarked on 200 UltiMed validation clips (ParakeetWeb's `benchmark_datasets/french_medical/`, padded with 0.25 s of silence like the app does; unpadded clips drift into English and give meaningless numbers). WER without boosting 12.3% (drugs) / 13.1% (dictionary). Upstream's boost fed the ~77k medical phrases raises it to 17.6% / 18.5%: its strength and rank gate suit a few user words, not a huge list. ParakeetWeb's trie with the list lowers it to 12.0% / 11.7%. Hybrid with the dictionary on top: 11.6% / 12.0%, and the most target terms recovered. The ignored test `phrase_boost::model::tests::bench_transcribe` is the harness.
 
 ## 5. Versioning
 
