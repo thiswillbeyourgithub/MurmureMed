@@ -61,9 +61,12 @@ pub fn build_trie(raw: &str, tokenizer: &Tokenizer) -> Option<BoostingTrie> {
     (!trie.is_empty()).then_some(trie)
 }
 
-/// Add the trie's bonuses for the active set to `scores`, a copy of `logits`
-/// that may already carry other boosts. Blank is never boosted, so a phrase
-/// can neither force nor suppress a blank.
+/// Apply the trie's bonuses for the active set to `scores`, a copy of `logits`
+/// that may already carry another boost (the dictionary's). When both boost a
+/// token, the larger-magnitude bonus wins instead of summing, like ParakeetWeb
+/// resolves two phrases proposing the same token: stacking the two systems
+/// would over-boost the overlap. Blank is never boosted, so a phrase can
+/// neither force nor suppress a blank.
 pub fn add_phrase_bonuses(
     trie: &BoostingTrie,
     logits: &[f32],
@@ -72,8 +75,9 @@ pub fn add_phrase_bonuses(
     scores: &mut [f32],
 ) {
     for (id, bonus) in trie.boosts(logits, active) {
-        if id as i32 != blank_idx {
-            scores[id] += bonus;
+        let current = scores[id] - logits[id];
+        if id as i32 != blank_idx && bonus.abs() > current.abs() {
+            scores[id] = logits[id] + bonus;
         }
     }
 }
@@ -116,6 +120,25 @@ mod tests {
             bonuses_of(vec![1], &[5.0, 0.0, -1.0], 2),
             vec![5.0, 0.0, -1.0]
         );
+    }
+
+    #[test]
+    fn larger_of_dictionary_and_phrase_bonus_wins() {
+        let trie = BoostingTrie::new(&[EncodedPhrase {
+            ids: vec![1],
+            weight: 1.0,
+            minp: DEFAULT_BOOST_MIN_P,
+        }]);
+        let logits = [1.0, 0.6, 0.0];
+        let with_prior = |prior: f32| {
+            let mut scores = logits.to_vec();
+            scores[1] += prior;
+            add_phrase_bonuses(&trie, &logits, &trie.start(), 2, &mut scores);
+            scores[1]
+        };
+        // Phrase bonus 1.0: replaces a weaker 0.5, leaves a stronger 2.0, never sums.
+        assert_eq!(with_prior(0.5), 1.6);
+        assert_eq!(with_prior(2.0), 2.6);
     }
 
     #[test]
