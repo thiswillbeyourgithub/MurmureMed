@@ -57,7 +57,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 | Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | not needed for now (the medical rules' only lookbehind, the title exclusions, is handled in code; InterHop rules have none) | |
 | Compile regex once, not on every transcription | `feat/regex-compile-once` | | merged (11x to 15x faster rule application) | not planned (upstream is fine with compiling per transcription for its short lists, see #498) |
 | Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
-| ParakeetWeb phrase boosting engine | `feat/phrase-boosting` | | planned | |
+| ParakeetWeb phrase boosting engine | `feat/phrase-boosting` (from `medmain`) | | in progress | |
 | French medical phrase boosting list | `feat/medical-phrase-list` | `feat/phrase-boosting` | planned | |
 | Branding (name, icon, explicit fork credit), toggles for extra regex and phrase boosting | `feat/branding` | | planned | |
 | Remote microphone through an internet relay (or iroh) | `feat/remote-mic-relay` | | idea | |
