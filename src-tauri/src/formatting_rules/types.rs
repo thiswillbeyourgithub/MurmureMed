@@ -92,6 +92,8 @@ pub struct BuiltInOptions {
     pub text_numbers_language: String,
     /// Threshold for text-to-number conversion (0.0 to 1.0)
     pub text_numbers_threshold: f64,
+    /// MurmureMed: fix French drug names and medical terms (bundled rules)
+    pub medical_fixes: bool,
 }
 
 impl Default for BuiltInOptions {
@@ -103,6 +105,7 @@ impl Default for BuiltInOptions {
             convert_text_numbers: false,
             text_numbers_language: "en".to_string(),
             text_numbers_threshold: 0.0,
+            medical_fixes: true,
         }
     }
 }
