@@ -5,10 +5,12 @@
 //! import or a reset of either side leaves the other alone.
 
 mod drug_rules;
+mod interhop;
 mod store;
 
 pub use drug_rules::{validate_edit, RuleEdit, RuleView};
 use drug_rules::{Bundled, DrugRules};
+pub use interhop::default_rules as default_formatting_rules;
 use log::warn;
 use std::sync::{Arc, RwLock};
 use tauri::AppHandle;

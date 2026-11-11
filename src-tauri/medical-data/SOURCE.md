@@ -27,4 +27,20 @@ MURMUREMED_DRUG_PARITY=/path/to/parity.jsonl cargo test --release --lib medical 
 
 That also checks that every rule still parses and compiles.
 
+## interhop/
+
+InterHop's French medical dictation rules (138 regexes: units, vital signs, dictated punctuation, exam templates triggered by "ajoute la commande ..."), seeded as the user's formatting rules on a fresh install by `src-tauri/src/medical/interhop.rs`. From then on they are ordinary user rules: editable, removable, exported and imported like any other. Existing installs keep their rules; they can import InterHop's `config.murmure` with "Fusionner" (same rule ids, so nothing is duplicated, but that import also overwrites the built-in options).
+
+- Source: https://framagit.org/interhop/murmure-regex (`regex.csv`). The commit is in `interhop/PROVENANCE`.
+- `rules.json` is generated from `regex.csv` by InterHop's own converter (`convert_csv_to_murmure.py`, loaded from the clone): same parsing, same skipped rows, same ids as their `config.murmure`. Each rule keeps its example, and the Rust tests check that every example gives the expected text, alone and with all the rules together.
+- License: TODO. The repository has no license file; the MurmureMed maintainer is clarifying this with InterHop.
+
+### Refresh
+
+```bash
+# from a local clone of murmure-regex (default: ../../../parakeet_web/framagit_murmure)
+python sync-interhop-rules.py [path/to/murmure-regex]
+cd .. && cargo test --lib interhop
+```
+
 Set up with Claude Code.
