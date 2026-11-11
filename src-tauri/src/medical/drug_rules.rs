@@ -64,7 +64,7 @@ struct SourceRule {
     variant: String,
 }
 
-/// A user change to the medical rules, stored in the formatting settings.
+/// A user change to the medical rules, stored in `medical_rules.json`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RuleEdit {
     /// Full pattern of the bundled rule this edit replaces, or `None` for a
