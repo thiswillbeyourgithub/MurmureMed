@@ -92,6 +92,8 @@ pub struct BuiltInOptions {
     pub text_numbers_language: String,
     /// Threshold for text-to-number conversion (0.0 to 1.0)
     pub text_numbers_threshold: f64,
+    /// MurmureMed: fix French drug names and medical terms (bundled rules)
+    pub medical_fixes: bool,
 }
 
 impl Default for BuiltInOptions {
@@ -103,15 +105,26 @@ impl Default for BuiltInOptions {
             convert_text_numbers: false,
             text_numbers_language: "en".to_string(),
             text_numbers_threshold: 0.0,
+            medical_fixes: true,
         }
     }
 }
 
 /// Complete formatting settings including built-in options and custom rules
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FormattingSettings {
     pub built_in: BuiltInOptions,
     pub rules: Vec<FormattingRule>,
+}
+
+impl Default for FormattingSettings {
+    /// MurmureMed: a fresh install starts with InterHop's medical dictation rules.
+    fn default() -> Self {
+        Self {
+            built_in: BuiltInOptions::default(),
+            rules: crate::medical::default_formatting_rules(),
+        }
+    }
 }
 
 #[cfg(test)]

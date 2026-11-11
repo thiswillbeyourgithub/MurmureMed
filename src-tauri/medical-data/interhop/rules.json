@@ -1,0 +1,968 @@
+[
+ {
+  "id": "82534e5d-07f6-5171-a4ed-994ed28527f7",
+  "trigger": "\\b(\\d+)\\s?mg\\s?par\\s?kilo\\s?par\\s?jour\\b",
+  "replacement": "$1 mg/kg/j",
+  "example_pre": "15 mg par kilo par jour",
+  "example_post": "15 mg/kg/j"
+ },
+ {
+  "id": "a144529d-83c2-5076-b9f5-fccd3de31f4f",
+  "trigger": "pourcent",
+  "replacement": "%",
+  "example_pre": "50 pourcent",
+  "example_post": "50 %"
+ },
+ {
+  "id": "be49932c-5320-5e23-bcf3-22ea4551049f",
+  "trigger": "(?i)battements?\\s+par\\s+minute",
+  "replacement": "bpm",
+  "example_pre": "battements par minute",
+  "example_post": "bpm"
+ },
+ {
+  "id": "d6b30f11-97ac-5557-9722-b5896de8aeb9",
+  "trigger": "\\bcomprim[eé]s?\\b",
+  "replacement": "cp",
+  "example_pre": "2 comprimés",
+  "example_post": "2 cp"
+ },
+ {
+  "id": "fc77dbde-92a5-5d90-abf6-d7b2b04ea1f3",
+  "trigger": "\\b(pouls|fr[eé]quence\\s+cardiaque)\\s+(\\d{2,3})\\b",
+  "replacement": "FC $2 bpm",
+  "example_pre": "pouls 75",
+  "example_post": "FC 75 bpm"
+ },
+ {
+  "id": "4ba92dda-de54-510d-9b02-044fea315130",
+  "trigger": "\\bgrammes?\\b",
+  "replacement": "g",
+  "example_pre": "cinq grammes",
+  "example_post": "cinq g"
+ },
+ {
+  "id": "30fc235f-1244-515e-8c04-4f04d0b08d9d",
+  "trigger": "(?i)litres?\\s+par\\s+minute",
+  "replacement": "l/min",
+  "example_pre": "litres par minute",
+  "example_post": "l/min"
+ },
+ {
+  "id": "fca79afa-8118-563c-926c-78e2376f89a9",
+  "trigger": "mètre carré",
+  "replacement": "m2",
+  "example_pre": "mètre carré",
+  "example_post": "m2"
+ },
+ {
+  "id": "b41b8421-0506-5f2d-9bbc-c8d1031baf50",
+  "trigger": "\\bmatin\\s+midi\\s+et\\s+soir\\b",
+  "replacement": "matin/midi/soir",
+  "example_pre": "matin midi et soir",
+  "example_post": "matin/midi/soir"
+ },
+ {
+  "id": "018cdcdf-60af-5553-b2d0-fc55c38250e2",
+  "trigger": "\\bmilligrammes?\\b",
+  "replacement": "mg",
+  "example_pre": "un milligramme",
+  "example_post": "un mg"
+ },
+ {
+  "id": "b6e6feb5-96e1-5000-b315-7c3e2e2c5e3e",
+  "trigger": "\\bmillilitres?\\b",
+  "replacement": "mL",
+  "example_pre": "dix millilitres",
+  "example_post": "dix mL"
+ },
+ {
+  "id": "23c0a691-f524-532e-8b5f-437e84905606",
+  "trigger": "\\bmicrogrammes?\\b",
+  "replacement": "µg",
+  "example_pre": "un microgramme",
+  "example_post": "un µg"
+ },
+ {
+  "id": "524db7ff-9948-50e4-8100-dfe5b96d2268",
+  "trigger": "mm de mercure.",
+  "replacement": "mmHg",
+  "example_pre": "mm de mercure.",
+  "example_post": "mmHg"
+ },
+ {
+  "id": "74e0e95b-1cac-5842-aa65-1fbd7501407d",
+  "trigger": "\\b(?:saturation|sat)\\s+(\\d{2,3})\\b",
+  "replacement": "SpO2 $1%",
+  "example_pre": "saturation 98",
+  "example_post": "SpO2 98%"
+ },
+ {
+  "id": "66d6eed9-2bd1-56f0-8b11-5c4112988499",
+  "trigger": "\\b(?:tension|TA)\\s+(\\d{2,3})\\s+(\\d{2,3})\\b",
+  "replacement": "TA : $1/$2",
+  "example_pre": "tension 120 80",
+  "example_post": "TA : 120/80"
+ },
+ {
+  "id": "0e5e2d53-7b69-583c-958c-f7b567b9ec51",
+  "trigger": "\\btemp[eé]rature\\s+(\\d{2})\\s+(\\d)\\b",
+  "replacement": "T° $1,$2",
+  "example_pre": "temperature 38 2",
+  "example_post": "T° 38,2"
+ },
+ {
+  "id": "7c6d9645-edf6-57b8-8778-b5d2d7a5c350",
+  "trigger": "\\bunit[eé]s?\\s?internationales?\\b",
+  "replacement": "UI",
+  "example_pre": "unités internationales",
+  "example_post": "UI"
+ },
+ {
+  "id": "23d19dc0-0e6d-5c53-895f-8e4ca96fbfcf",
+  "trigger": "\\s*foi[es]\\s+par\\s+jours?",
+  "replacement": "/j",
+  "example_pre": "3 fois par jour",
+  "example_post": "3/j"
+ },
+ {
+  "id": "648a419a-2868-546f-a35f-7d9e41563fd8",
+  "trigger": "\\s*foi[es]\\s+par\\s+semaines?",
+  "replacement": "/sem",
+  "example_pre": "3 fois par semaine",
+  "example_post": "3/sem"
+ },
+ {
+  "id": "7ce4f12a-a803-5677-9978-668b0c6c5fee",
+  "trigger": "\\s*foi[es]\\s+par\\s+heures?",
+  "replacement": "/h",
+  "example_pre": "3 fois par heure",
+  "example_post": "3/h"
+ },
+ {
+  "id": "f04f35c0-3a85-5fb6-944a-74426f2f2b11",
+  "trigger": "\\s*foi[es]\\s+par\\s+mois?",
+  "replacement": "/mois",
+  "example_pre": "3 fois par mois",
+  "example_post": "3/mois"
+ },
+ {
+  "id": "c5cd32da-995c-5cf3-9e92-3756e1fdfd20",
+  "trigger": "\\s*foi[es]\\s+par\\s+ans?",
+  "replacement": "/an",
+  "example_pre": "3 fois par ans",
+  "example_post": "3/an"
+ },
+ {
+  "id": "5df03278-b079-56ac-8e90-5a1d3d4e2b97",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+anaphylaxie[.,?!;\\s]*",
+  "replacement": "HD : normotendu, normocarde, pas de signe de malperfusion périphérique\nORL : pas de signe oedeme de Quincke, pas d'oedeme de la luette ni de la langue\npas de dysphagie pas de dysphonie\nDigestif : pas de diarrhée, pas de vomissement ni dlr abdo\nPulmonaire : MV +/+ pas de bronchospasme, eupnéique, pas de toux\nCutané : pas de rash ni oedeme\n",
+  "example_pre": "ajoute la commande examen anaphylaxie.",
+  "example_post": "HD : normotendu, normocarde, pas de signe de malperfusion périphérique\nORL : pas de signe oedeme de Quincke, pas d'oedeme de la luette ni de la langue\npas de dysphagie pas de dysphonie\nDigestif : pas de diarrhée, pas de vomissement ni dlr abdo\nPulmonaire : MV +/+ pas de bronchospasme, eupnéique, pas de toux\nCutané : pas de rash ni oedeme\n"
+ },
+ {
+  "id": "249b1eb4-69a2-5389-9fa4-57aa714a6bde",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examens?\\s+(d'un)?patients?\\s+alcoolis[eé]e?s?[.,?!;\\s]*",
+  "replacement": "Patient revu cliniquement\n-Les constantes hémodynamiques sont bonnes. dextro ok \n-Eupnéique sans inhalation\n-Pas de syndrome de sevrage, pas de tremblement\nCe jour le moral est bon, pas d'idées noires ni idées suicidaires exprimées. Pas de syndrome délirant à l'entretien\n-Examen neurologique normal : Glasgow 15 calme orienté pas de signe déficitaire, arrive à marcher ou à se verticaliser. Pas de vomissement Les pupilles sont bien intermédiaires isocores et réactives. Absence de stigmate de TC\n=>>> Retour à domicile autorisé, consignes de surveillance données\n",
+  "example_pre": "Ajoute la commande examen patient alcoolisée.",
+  "example_post": "Patient revu cliniquement\n-Les constantes hémodynamiques sont bonnes. dextro ok \n-Eupnéique sans inhalation\n-Pas de syndrome de sevrage, pas de tremblement\nCe jour le moral est bon, pas d'idées noires ni idées suicidaires exprimées. Pas de syndrome délirant à l'entretien\n-Examen neurologique normal : Glasgow 15 calme orienté pas de signe déficitaire, arrive à marcher ou à se verticaliser. Pas de vomissement Les pupilles sont bien intermédiaires isocores et réactives. Absence de stigmate de TC\n=>>> Retour à domicile autorisé, consignes de surveillance données\n"
+ },
+ {
+  "id": "374a05b5-e763-5956-bb24-791051ed38b2",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+ordonnances?\\s+br[uû]lures[.,?!;\\s]*",
+  "replacement": "IDE PANSEMENT \nFaire réaliser par IDE à domicile, tous les jours (y compris week end et jours fériés) :\nJuste avant le passage de l’IDE, aller sous la douche pour laver l’ensemble des brûlures à l’eau et au savon.\nLaisser les brûlures dans une serviette propre en attendant le passage de l’IDE.\nRéfection de pansement de brûlures :\n- Excision des phlyctènes\n- Ablation de la fibrine à la curette\n- Lavage au sérum physiologique\n- Application de flammazine en couche très épaisse\n- Mise en place de compresses, bandes Velpeau et/ou bandes collantes.\nFaire un pansement bien occlusif car là flammazine colore la peau lorsqu’elle est laissée à l’air libre. \nEn cas de brûlure de main, bien réaliser le pansement les doigts séparés afin de permettre au patient de mobiliser au maximum les doigts pour éviter les enraidissements. \nUne fois la cicatrisation complète acquise, appliquer de la crème hydratante régulièrement et protection solaire indice 50+ pendant au moins 1 an\nORDONNANCE \nMédicaments :\n- Paracetamol : 1 gramme toutes les 6 heures si douleurs. QSP : 15 jours.\n- Tramadol : 50 mg à prendre une demie heure avant le pansement. QSP : 15 jours.\n- Flammazine crème : 5 tubes NE SURTOUT PAS APPLIQUER SUR LE VISAGE, pour visage : BIAFINE \nMatériel pansement (à renouveler selon les besoins) :\n- Mediset post-op : 2 unités\n- Compresses stériles 10x10cm : 1 boîte de 50\n- Bandes Velpeau 10cm : 5 unités\n- Sérum physiologique 125cc : 2 flacons\n- Bande adhésive type MEFIX 10 cm : 1 rouleau\n",
+  "example_pre": "Ajoute la commande ordonnance brûlures.",
+  "example_post": "IDE PANSEMENT \nFaire réaliser par IDE à domicile, tous les jours (y compris week end et jours fériés) :\nJuste avant le passage de l’IDE, aller sous la douche pour laver l’ensemble des brûlures à l’eau et au savon.\nLaisser les brûlures dans une serviette propre en attendant le passage de l’IDE.\nRéfection de pansement de brûlures :\n- Excision des phlyctènes\n- Ablation de la fibrine à la curette\n- Lavage au sérum physiologique\n- Application de flammazine en couche très épaisse\n- Mise en place de compresses, bandes Velpeau et/ou bandes collantes.\nFaire un pansement bien occlusif car là flammazine colore la peau lorsqu’elle est laissée à l’air libre. \nEn cas de brûlure de main, bien réaliser le pansement les doigts séparés afin de permettre au patient de mobiliser au maximum les doigts pour éviter les enraidissements. \nUne fois la cicatrisation complète acquise, appliquer de la crème hydratante régulièrement et protection solaire indice 50+ pendant au moins 1 an\nORDONNANCE \nMédicaments :\n- Paracetamol : 1 gramme toutes les 6 heures si douleurs. QSP : 15 jours.\n- Tramadol : 50 mg à prendre une demie heure avant le pansement. QSP : 15 jours.\n- Flammazine crème : 5 tubes NE SURTOUT PAS APPLIQUER SUR LE VISAGE, pour visage : BIAFINE \nMatériel pansement (à renouveler selon les besoins) :\n- Mediset post-op : 2 unités\n- Compresses stériles 10x10cm : 1 boîte de 50\n- Bandes Velpeau 10cm : 5 unités\n- Sérum physiologique 125cc : 2 flacons\n- Bande adhésive type MEFIX 10 cm : 1 rouleau\n"
+ },
+ {
+  "id": "b7b7dd49-37dd-5d01-bade-b5695ca37821",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+conclusion[.,?!;\\s]*",
+  "replacement": "Les constantes sont parfaites. Bruits du cœur réguliers pas de souffle perçu pas de signe d'insuffisance cardiaque droite ou gauche. Pas de signe de malperfusion périphérique. Pas de signe de TVP. Murmure vésiculaire bilatéral et symétrique sans bruit surajouté. Eupnéique. Pas de toux pas de crachat. Abdomen souple indolore et dépressible pas de trouble digestif. Glasgow 15 calme orienté pas de signe déficitaire",
+  "example_pre": "Ajoute la commande examen conclusion.",
+  "example_post": "Les constantes sont parfaites. Bruits du cœur réguliers pas de souffle perçu pas de signe d'insuffisance cardiaque droite ou gauche. Pas de signe de malperfusion périphérique. Pas de signe de TVP. Murmure vésiculaire bilatéral et symétrique sans bruit surajouté. Eupnéique. Pas de toux pas de crachat. Abdomen souple indolore et dépressible pas de trouble digestif. Glasgow 15 calme orienté pas de signe déficitaire"
+ },
+ {
+  "id": "60974fc8-b3f0-576c-b085-d68d66c10352",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la commande\\s+[eé]lectrisation[.,?!;\\s]*",
+  "replacement": "Électrisation avec du courant ménager 220 V\nTemps de contact bref < 1 seconde\nPas de milieu humide\nPas de douleur thoracique pas de dyspnée pas de palpitation\nPas de malaise pas de PDC \nPatient asymptomatique aux urgences\nAbsence de porte d'entrée retrouvée sur le corps\nCARDIO / HEMODYNAMIQUE\nconstantes ok \napyrexie \nbruits du coeur reguliers, pas de souffle perçus,  pas de signe IC droite ou gauche \npas de signe de malperfusion périphérique : TRC < 3 sec, extrémités chaudes, pas de marbrure\nPNEUMO\nMV +/+ pas de BSA,\neupnéique \nABDO \nsouple, dépressible, indolore \nNEURO\nGCS 15, calme, orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\nECG : normale\n=> Donc examen clinique tout à fait normal, électrisation simple, retour à domicile et consignes de surveillance clairement expliquées\n",
+  "example_pre": "Ajoute la commande électrisation.",
+  "example_post": "Électrisation avec du courant ménager 220 V\nTemps de contact bref < 1 seconde\nPas de milieu humide\nPas de douleur thoracique pas de dyspnée pas de palpitation\nPas de malaise pas de PDC \nPatient asymptomatique aux urgences\nAbsence de porte d'entrée retrouvée sur le corps\nCARDIO / HEMODYNAMIQUE\nconstantes ok \napyrexie \nbruits du coeur reguliers, pas de souffle perçus,  pas de signe IC droite ou gauche \npas de signe de malperfusion périphérique : TRC < 3 sec, extrémités chaudes, pas de marbrure\nPNEUMO\nMV +/+ pas de BSA,\neupnéique \nABDO \nsouple, dépressible, indolore \nNEURO\nGCS 15, calme, orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\nECG : normale\n=> Donc examen clinique tout à fait normal, électrisation simple, retour à domicile et consignes de surveillance clairement expliquées\n"
+ },
+ {
+  "id": "7de56391-4bd2-559b-a1be-03dd97e54513",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+entorse\\s+cheville\\s+gauche[.,?!;\\s]*",
+  "replacement": "Torsion de la cheville gauche en varus équin\npas de craquement, marche en boitant, pose le pied par terre \ndouleur ligament latéral externe : +\nHématome/œdème de la cheville : -\ndouleur Lisfranc/chopart : -\ndouleur ligament latéral interne : -\ndouleur Base du 5e métatarsien : -\ndouleur / rupture Tendon d'Achille : -\nRadio cheville gauche : normale\nConclusion : Entorse bénigne de la cheville gauche\nprotocole Rice 21 jours \nkiné 5 séances a prévoir dés amélioration de la douleur en prévention de la récidive\n",
+  "example_pre": "Ajoute la commande entorse cheville gauche.",
+  "example_post": "Torsion de la cheville gauche en varus équin\npas de craquement, marche en boitant, pose le pied par terre \ndouleur ligament latéral externe : +\nHématome/œdème de la cheville : -\ndouleur Lisfranc/chopart : -\ndouleur ligament latéral interne : -\ndouleur Base du 5e métatarsien : -\ndouleur / rupture Tendon d'Achille : -\nRadio cheville gauche : normale\nConclusion : Entorse bénigne de la cheville gauche\nprotocole Rice 21 jours \nkiné 5 séances a prévoir dés amélioration de la douleur en prévention de la récidive\n"
+ },
+ {
+  "id": "5dbbe981-f849-594b-abbe-f8614ec40871",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+clinique[.,?!;\\s]*",
+  "replacement": "CARDIO / HEMODYNAMIQUE\nconstantes ok \napyrexie \nbruits du coeur reguliers, pas de souffle perçus,  pas de signe IC droite ou gauche \npas de signe de malperfusion périphérique : TRC < 3 sec, extrémités chaudes, pas de marbrure\nPas de signes évocateurs de TVP\nPNEUMO\nMV +/+ pas de BSA,\neupnéique \npas d'inhalation\npas de toux ni crachat\nABDO \nsouple, dépressible, indolore \npas de masse ni défense\npas d'ictère\npas de troubles du transit\nNEURO\nGCS 15, calme, orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\npupilles ISR\nexamen paires craniennes normal\npas de sd cérébelleux, vestibulaire et méningé\n",
+  "example_pre": "Ajoute la commande examen clinique.",
+  "example_post": "CARDIO / HEMODYNAMIQUE\nconstantes ok \napyrexie \nbruits du coeur reguliers, pas de souffle perçus,  pas de signe IC droite ou gauche \npas de signe de malperfusion périphérique : TRC < 3 sec, extrémités chaudes, pas de marbrure\nPas de signes évocateurs de TVP\nPNEUMO\nMV +/+ pas de BSA,\neupnéique \npas d'inhalation\npas de toux ni crachat\nABDO \nsouple, dépressible, indolore \npas de masse ni défense\npas d'ictère\npas de troubles du transit\nNEURO\nGCS 15, calme, orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\npupilles ISR\nexamen paires craniennes normal\npas de sd cérébelleux, vestibulaire et méningé\n"
+ },
+ {
+  "id": "97704b73-8a47-59c6-9393-946c652cf015",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+simplifié[.,?!;\\s]*",
+  "replacement": "CARDIO / HEMODYNAMIQUE\nconstantes ok \napyrexie \nbruits du coeur reguliers, pas de souffle perçus,  pas de signe IC droite ou gauche \npas de signe de malperfusion périphérique : TRC < 3 sec, extrémités chaudes, pas de marbrure\nPNEUMO\nMV +/+ pas de BSA,\neupnéique \nABDO \nsouple, dépressible, indolore \npas de masse ni défense\nNEURO\nGCS 15, calme, orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\n",
+  "example_pre": "Ajoute la commande examen simplifié.",
+  "example_post": "CARDIO / HEMODYNAMIQUE\nconstantes ok \napyrexie \nbruits du coeur reguliers, pas de souffle perçus,  pas de signe IC droite ou gauche \npas de signe de malperfusion périphérique : TRC < 3 sec, extrémités chaudes, pas de marbrure\nPNEUMO\nMV +/+ pas de BSA,\neupnéique \nABDO \nsouple, dépressible, indolore \npas de masse ni défense\nNEURO\nGCS 15, calme, orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\n"
+ },
+ {
+  "id": "049d7fe6-cff9-5b7a-95a9-523f1bbf8aeb",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+traumatisme\\s+cranien[.,?!;\\s]*",
+  "replacement": "Pas d'hématome palpé sur le scalp\nORL : pas de traumatisme facial, pas de trouble articulé dentaire, pas d'ottoragie, pas de trismus\nexamen endobuccal normal\nRachis cervicale : indolore, mobilités non limitées\nOphtalmo : pas de traumatisme oculaire, pas de BAV, pas de trouble de l'oculomotricité, oeil blanc et indolore\nNeuro : GCS 15, calme, bien orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\npupilles ISR\nexamen paires craniennes normal\npas de sd cérébelleux, vestibulaire et méningé\npas de nausée ni vomissement\n",
+  "example_pre": "Ajoute la commande examen traumatisme cranien.",
+  "example_post": "Pas d'hématome palpé sur le scalp\nORL : pas de traumatisme facial, pas de trouble articulé dentaire, pas d'ottoragie, pas de trismus\nexamen endobuccal normal\nRachis cervicale : indolore, mobilités non limitées\nOphtalmo : pas de traumatisme oculaire, pas de BAV, pas de trouble de l'oculomotricité, oeil blanc et indolore\nNeuro : GCS 15, calme, bien orienté temps + espace\npas de déficit moteur ou sensitif 4 membres\npupilles ISR\nexamen paires craniennes normal\npas de sd cérébelleux, vestibulaire et méningé\npas de nausée ni vomissement\n"
+ },
+ {
+  "id": "19adcd2c-f9dd-5b64-8689-4e9d1667ee21",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+traumatologie[.,?!;\\s]*",
+  "replacement": "Au bilan traumatologique :\n-HD : cstes ok, pas de signe de malperfusion périphérique \n-Crâne : Glasgow 15 calme orienté, pas de stigmate de traumatisme crânien. Pupilles intermédiaires isocores et réactives. Pas de DSM. Pas d'ottoragie \n-ORL : pas d'epistaxis, pas de trouble de l'articulé dentaire, pas de tb de l'oculomotricité, ex endobuccal normal. OPH pas de BAV pas de traumatisme\n-Rachis : pas de douleur aux épineuses, pas de contracture, pas de syndrome rachidien\n-Thorax : pas d'hématome, pas de plaie pas d'emphysème. Murmure vésiculaire bilatéral et symétrique sans bruit surajouté. Patient eupnéique. Pas de trace de la ceinture . Saturation OK en air ambiant\n-Abdomen : pas de plaie pas d'hématome, souple indolore et dépressible. pas de tb digestif \n-Bassin : stable, indolore\n-Membres supérieurs : pas de stigmate de traumatisme, pas d'hématome, pas d'œdème\n-Membres inférieurs : pas de stigmate de traumatisme, pas d'hématome, pas d'œdème\n",
+  "example_pre": "Ajoute la commande examen traumatologie.",
+  "example_post": "Au bilan traumatologique :\n-HD : cstes ok, pas de signe de malperfusion périphérique \n-Crâne : Glasgow 15 calme orienté, pas de stigmate de traumatisme crânien. Pupilles intermédiaires isocores et réactives. Pas de DSM. Pas d'ottoragie \n-ORL : pas d'epistaxis, pas de trouble de l'articulé dentaire, pas de tb de l'oculomotricité, ex endobuccal normal. OPH pas de BAV pas de traumatisme\n-Rachis : pas de douleur aux épineuses, pas de contracture, pas de syndrome rachidien\n-Thorax : pas d'hématome, pas de plaie pas d'emphysème. Murmure vésiculaire bilatéral et symétrique sans bruit surajouté. Patient eupnéique. Pas de trace de la ceinture . Saturation OK en air ambiant\n-Abdomen : pas de plaie pas d'hématome, souple indolore et dépressible. pas de tb digestif \n-Bassin : stable, indolore\n-Membres supérieurs : pas de stigmate de traumatisme, pas d'hématome, pas d'œdème\n-Membres inférieurs : pas de stigmate de traumatisme, pas d'hématome, pas d'œdème\n"
+ },
+ {
+  "id": "7097c174-b43a-5228-91a2-2cd6934ec9b1",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+[ée]chographie\\s+urgentiste[.,?!;\\s]*",
+  "replacement": "Fast echo Urgentiste  :\nabsence d'épanchement dans le Morisson, dans le Koelher et dans le douglas \npas d'ascite\npas de globe \nà l'étage thoracique pas d'épanchement pleural\n",
+  "example_pre": "Ajoute la commande échographie urgentiste.",
+  "example_post": "Fast echo Urgentiste  :\nabsence d'épanchement dans le Morisson, dans le Koelher et dans le douglas \npas d'ascite\npas de globe \nà l'étage thoracique pas d'épanchement pleural\n"
+ },
+ {
+  "id": "241a5100-c395-5286-afe4-240b40e89354",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+drain\\s+thoracique[.,?!;\\s]*",
+  "replacement": "Pose de Drain de Fuhrmann pour pneumothorax sans signe de gravité \npatient en salle de déchocage \nscope + VVP + 02 si besoin \nstabilité HD et respiratoire \npatient informé de la procédure\nbio ok coag ok \nHeure : XX\nAnesthésie locale par Xylocaine 10cc au niveau 2eme espace inter costale, voie antérieure, sur la ligné médio claviculaire-mamelon  \ndésinfection soigneuse \npose de champs \npose de drain de fuhrman selon la technique de Seldinger \npose de valve anti retour : testée et efficace une fois le drain posée \npas de complication immédiate \nSurveillance au déchoc dans les suites du geste \nRP post geste : drain en place \npatient informé des consignes de surveillance et de reconsultation \nRAD autorisé accompagné avec Cs de controle a 48h en service de pneumo au CHU\n",
+  "example_pre": "Ajoute la commande drain thoracique.",
+  "example_post": "Pose de Drain de Fuhrmann pour pneumothorax sans signe de gravité \npatient en salle de déchocage \nscope + VVP + 02 si besoin \nstabilité HD et respiratoire \npatient informé de la procédure\nbio ok coag ok \nHeure : XX\nAnesthésie locale par Xylocaine 10cc au niveau 2eme espace inter costale, voie antérieure, sur la ligné médio claviculaire-mamelon  \ndésinfection soigneuse \npose de champs \npose de drain de fuhrman selon la technique de Seldinger \npose de valve anti retour : testée et efficace une fois le drain posée \npas de complication immédiate \nSurveillance au déchoc dans les suites du geste \nRP post geste : drain en place \npatient informé des consignes de surveillance et de reconsultation \nRAD autorisé accompagné avec Cs de controle a 48h en service de pneumo au CHU\n"
+ },
+ {
+  "id": "134a4c55-6e36-50e8-aa1d-96e91fd73337",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+intubation[.,?!;\\s]*",
+  "replacement": "Intubation orotrachéale en séquence rapide\nOpérateur : XX\npose 2 VVP, scope \nPre oxygénation masque à haute concentration 15 l > 3min \nlame de laryngoscopie :\nCalibre sonde intubation :\nMatériel intubation difficile utilisé  :\nPas de bris dentaire, pas de dentier, pas de désaturation ni inhalation per procédure\n-induction\npoids estimé : XX kg \nheure : XX\nEtomidate : 0.3 mg/kg  IVD\nCélocurine :  1 mg/kg IVD\nAuscultation intubation non sélective\nCapno initiale : XX mmHg\ncourbe compatible avec une sonde en position intra trachéale\n-Relais sédation\nHypnovel :  mg/h\nSufentanyl :  Gamma/h\n-Respirateur\nvolume courant :\nPEP : \nFi 02 : \nPose SNG ? \nPose SAD ?\nRP post IOT : \n",
+  "example_pre": "Ajoute la commande intubation.",
+  "example_post": "Intubation orotrachéale en séquence rapide\nOpérateur : XX\npose 2 VVP, scope \nPre oxygénation masque à haute concentration 15 l > 3min \nlame de laryngoscopie :\nCalibre sonde intubation :\nMatériel intubation difficile utilisé  :\nPas de bris dentaire, pas de dentier, pas de désaturation ni inhalation per procédure\n-induction\npoids estimé : XX kg \nheure : XX\nEtomidate : 0.3 mg/kg  IVD\nCélocurine :  1 mg/kg IVD\nAuscultation intubation non sélective\nCapno initiale : XX mmHg\ncourbe compatible avec une sonde en position intra trachéale\n-Relais sédation\nHypnovel :  mg/h\nSufentanyl :  Gamma/h\n-Respirateur\nvolume courant :\nPEP : \nFi 02 : \nPose SNG ? \nPose SAD ?\nRP post IOT : \n"
+ },
+ {
+  "id": "14280049-6b1c-5358-b6fc-02126a8ac5b9",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+luxation\\s+épaule[.,?!;\\s]*",
+  "replacement": "Luxation glénohumérale antéro-interne de l'épaule\nPas de déficit moteur\npas de déficit vasculaire\nimpotence fonctionnelle totale\npas d'atteinte du nerf circonflexe\nRadiographie épaule : Luxation sans fracture associée\nRéduction par manœuvre externe en salle de déchocage sous Propofol\nScope\nPre oxygénation pendant > 3 minutes. Sat 100%. \nPose de perfusions\nLe malade est informé de la procédure\nSucces clinique. Pose de gilet orthopédique \nAttente d'un réveil complet GCS 15 \nRadiographie poste réduction : Succès radiologique\nExamen neurologique et vasculaire normale poste réduction\nPersistance d'un réveil GCS 15 en sauv \nRetour à domicile autorisé accompagné. Consignes de surveillance donnés\nconsultation orthopédique de controle demandée\n",
+  "example_pre": "Ajoute la commande luxation épaule.",
+  "example_post": "Luxation glénohumérale antéro-interne de l'épaule\nPas de déficit moteur\npas de déficit vasculaire\nimpotence fonctionnelle totale\npas d'atteinte du nerf circonflexe\nRadiographie épaule : Luxation sans fracture associée\nRéduction par manœuvre externe en salle de déchocage sous Propofol\nScope\nPre oxygénation pendant > 3 minutes. Sat 100%. \nPose de perfusions\nLe malade est informé de la procédure\nSucces clinique. Pose de gilet orthopédique \nAttente d'un réveil complet GCS 15 \nRadiographie poste réduction : Succès radiologique\nExamen neurologique et vasculaire normale poste réduction\nPersistance d'un réveil GCS 15 en sauv \nRetour à domicile autorisé accompagné. Consignes de surveillance donnés\nconsultation orthopédique de controle demandée\n"
+ },
+ {
+  "id": "46142841-6ab6-55b0-a539-3662e809e14a",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+ordonnance\\s+botte\\s+de\\s+marche[.,?!;\\s]*",
+  "replacement": "Poches de glace à appliquer 2 x par jour pendant 48-72 heures\nParacétamol 1 g/6 h si douleurs pendant 7 jours\nbotte de marche a porter 21 jours\nattelle de cheville type Aircast la nuit\nbéquilles une paire avec appui partiel du pied autorisé\nPas de sport pendant 1 mois\n",
+  "example_pre": "Ajoute la commande ordonnance botte de marche.",
+  "example_post": "Poches de glace à appliquer 2 x par jour pendant 48-72 heures\nParacétamol 1 g/6 h si douleurs pendant 7 jours\nbotte de marche a porter 21 jours\nattelle de cheville type Aircast la nuit\nbéquilles une paire avec appui partiel du pied autorisé\nPas de sport pendant 1 mois\n"
+ },
+ {
+  "id": "7379bd42-db71-59c9-8d90-18127c9a873b",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+ordonnance\\s+br[uû]lure[.,?!;\\s]*",
+  "replacement": "Faire réaliser par IDE à domicile, tous les jours (y compris week end et jours fériés) :\nJuste avant le passage de l’IDE, aller sous la douche pour laver l’ensemble des brûlures à l’eau et au savon. \nLaisser les brûlures dans une serviette propre en attendant le passage de l’IDE. \nRéfection de pansement de brûlures : \n - Excision des phlyctènes \n - Ablation de la fibrine à la curette ou à la compresse \n - Lavage au sérum physiologique \n - Application de flammazine en couche très épaisse \n - Mise en place de compresses, bandes Velpeau et/ou bandes collantes. \nFaire un pansement bien occlusif car là flammazine colore la peau lorsqu’elle est laissée à l’air libre.  \nEn cas de brûlure de main, bien réaliser le pansement les doigts séparés afin de permettre au patient de mobiliser au maximum les doigts pour éviter les enraidissements.  \nUne fois la cicatrisation complète acquise, appliquer de la crème hydratante régulièrement et protection solaire indice 50+ pendant au moins 1 an.\n",
+  "example_pre": "Ajoute la commande ordonnance brûlure.",
+  "example_post": "Faire réaliser par IDE à domicile, tous les jours (y compris week end et jours fériés) :\nJuste avant le passage de l’IDE, aller sous la douche pour laver l’ensemble des brûlures à l’eau et au savon. \nLaisser les brûlures dans une serviette propre en attendant le passage de l’IDE. \nRéfection de pansement de brûlures : \n - Excision des phlyctènes \n - Ablation de la fibrine à la curette ou à la compresse \n - Lavage au sérum physiologique \n - Application de flammazine en couche très épaisse \n - Mise en place de compresses, bandes Velpeau et/ou bandes collantes. \nFaire un pansement bien occlusif car là flammazine colore la peau lorsqu’elle est laissée à l’air libre.  \nEn cas de brûlure de main, bien réaliser le pansement les doigts séparés afin de permettre au patient de mobiliser au maximum les doigts pour éviter les enraidissements.  \nUne fois la cicatrisation complète acquise, appliquer de la crème hydratante régulièrement et protection solaire indice 50+ pendant au moins 1 an.\n"
+ },
+ {
+  "id": "59886cfd-303c-57fc-8e7e-32b8aec9b5ce",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+ordonnance\\s+entorse\\s+cheville[.,?!;\\s]*",
+  "replacement": "Poches de glace à appliquer 2 x par jour pendant 48-72 heures\nParacétamol 1 g/6 h si douleurs pendant 7 jours\nattelle de cheville type Aircast pendant 21 jours et nuits\nbéquilles une paire avec appui partiel du pied autorisé\nPas de sport pendant 1 mois\n",
+  "example_pre": "Ajoute la commande ordonnance entorse cheville.",
+  "example_post": "Poches de glace à appliquer 2 x par jour pendant 48-72 heures\nParacétamol 1 g/6 h si douleurs pendant 7 jours\nattelle de cheville type Aircast pendant 21 jours et nuits\nbéquilles une paire avec appui partiel du pied autorisé\nPas de sport pendant 1 mois\n"
+ },
+ {
+  "id": "ecc87cdc-e075-5ad3-8e23-2979868f08fe",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+sédation\\s+procédurale[.,?!;\\s]*",
+  "replacement": "patient en SAUV, informé de la procédure\nscope\nVVP+ NaCl\nEx hémodynamique ok, saturation 100%\nsous 02 au MHC, pré oxygéné > 3 min\nHeure injection : \n1ère dose de propofol : mg\nBolus pour entretient : XX\nRéduction \nPas de désaturation ni hypotension per procédure\nEx neurologique et vasculaire normal\nretour rapide GCS 15\n",
+  "example_pre": "Ajoute la commande sédation procédurale.",
+  "example_post": "patient en SAUV, informé de la procédure\nscope\nVVP+ NaCl\nEx hémodynamique ok, saturation 100%\nsous 02 au MHC, pré oxygéné > 3 min\nHeure injection : \n1ère dose de propofol : mg\nBolus pour entretient : XX\nRéduction \nPas de désaturation ni hypotension per procédure\nEx neurologique et vasculaire normal\nretour rapide GCS 15\n"
+ },
+ {
+  "id": "9c3108ab-dc59-598c-8d9a-9c0636ff4613",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+sortie\\s+contre\\s+avis[.,?!;\\s]*",
+  "replacement": "Patient nous informant qu'il souhaite quitter le service des urgences contre avis médical\nactuellement Glasgow 15, orienté dans le temps et dans l'espace\nVu en entretien et persiste dans son refus de soins\nNe présente pas de trouble du comportement ni de trouble de la compréhension\nEst bien au courant que son état impose de rester aux urgences et des complications graves que pas entraîner son départ immédiat\nrefus répété de quitter le service \nIl est bien au clair qu'il peut revenir à tout moment service des urgences s'il change d'avis\nles consignes de surveillance ont été données à l'oral \nSortie contre avis \n",
+  "example_pre": "Ajoute la commande sortie contre avis.",
+  "example_post": "Patient nous informant qu'il souhaite quitter le service des urgences contre avis médical\nactuellement Glasgow 15, orienté dans le temps et dans l'espace\nVu en entretien et persiste dans son refus de soins\nNe présente pas de trouble du comportement ni de trouble de la compréhension\nEst bien au courant que son état impose de rester aux urgences et des complications graves que pas entraîner son départ immédiat\nrefus répété de quitter le service \nIl est bien au clair qu'il peut revenir à tout moment service des urgences s'il change d'avis\nles consignes de surveillance ont été données à l'oral \nSortie contre avis \n"
+ },
+ {
+  "id": "888396f1-ac61-5ca4-acb5-d4d09e859129",
+  "trigger": "\\bhaine\\s?S\\b",
+  "replacement": "AINS",
+  "example_pre": "haine S",
+  "example_post": "AINS"
+ },
+ {
+  "id": "2a9597c5-40e9-5958-8585-46bc07bd579e",
+  "trigger": "\\bA[iï]e\\s?N\\s?S\\b",
+  "replacement": "AINS",
+  "example_pre": "Aïe NS",
+  "example_post": "AINS"
+ },
+ {
+  "id": "d375a83c-ed1b-53d6-aa05-d7a81fc501ca",
+  "trigger": "bisoprololol",
+  "replacement": "bisoprolol",
+  "example_pre": "bisoprololol",
+  "example_post": "bisoprolol"
+ },
+ {
+  "id": "eb294043-e515-5bc2-9351-fe036c7dbd80",
+  "trigger": "hydroxyne",
+  "replacement": "HYDROXYZINE",
+  "example_pre": "hydroxyne",
+  "example_post": "HYDROXYZINE"
+ },
+ {
+  "id": "a71f1689-b8fc-580d-9f52-eeb3be1d3464",
+  "trigger": "cardégique",
+  "replacement": "kardégic",
+  "example_pre": "cardégique",
+  "example_post": "kardégic"
+ },
+ {
+  "id": "ea1d371a-a5f3-53ac-ac3d-6b5c8bd93541",
+  "trigger": "kétiapine",
+  "replacement": "QUÉTIAPINE",
+  "example_pre": "kétiapine",
+  "example_post": "QUÉTIAPINE"
+ },
+ {
+  "id": "fdbf55c5-1074-5f19-808b-9ec1e47250ea",
+  "trigger": "(?i)l'oxapine",
+  "replacement": "LOXAPINE",
+  "example_pre": "l'oxapine",
+  "example_post": "LOXAPINE"
+ },
+ {
+  "id": "a25227a7-f399-5044-a91e-619ac1e424f8",
+  "trigger": "(?i)\\bhd\\s*j\\b",
+  "replacement": "HDJ",
+  "example_pre": "hd j",
+  "example_post": "HDJ"
+ },
+ {
+  "id": "efd543cb-9b00-575b-8d62-bb9ead76a02d",
+  "trigger": "(?i)\\bvall?ium\\b",
+  "replacement": "VALIUM",
+  "example_pre": "Vallium",
+  "example_post": "VALIUM"
+ },
+ {
+  "id": "1bcd53fe-18be-5d4c-a98e-8b4186583a3e",
+  "trigger": "(?i)\\bdias[eé]pam\\b",
+  "replacement": "DIAZEPAM",
+  "example_pre": "Diasépam",
+  "example_post": "DIAZEPAM"
+ },
+ {
+  "id": "12e5d208-bced-5acb-b97d-4e17162870e6",
+  "trigger": "(?i)\\bali\\s*mazine\\b",
+  "replacement": "ALIMEMAZINE",
+  "example_pre": "Ali Mazine",
+  "example_post": "ALIMEMAZINE"
+ },
+ {
+  "id": "813b294f-ea27-59fd-9e28-788c7e70f4d7",
+  "trigger": "(?i)\\bzoopi\\s*clone\\b",
+  "replacement": "ZOPICLONE",
+  "example_pre": "Zoopi clone",
+  "example_post": "ZOPICLONE"
+ },
+ {
+  "id": "3bb3439a-0fc6-5f5c-ab00-745443c33682",
+  "trigger": "(?i)\\bla\\s*motrigine\\b",
+  "replacement": "LAMOTRIGINE",
+  "example_pre": "La motrigine",
+  "example_post": "LAMOTRIGINE"
+ },
+ {
+  "id": "f7479278-6cb7-57dd-9981-74a2fe366abf",
+  "trigger": "(?i)\\blauras?\\s+et\\s+pam\\b",
+  "replacement": "LORAZEPAM",
+  "example_pre": "Lauras et Pam",
+  "example_post": "LORAZEPAM"
+ },
+ {
+  "id": "adf5a8ed-79cd-57db-a14e-38334b9a4f02",
+  "trigger": "(?i)\\bl'oraz[eé]pam\\b",
+  "replacement": "LORAZEPAM",
+  "example_pre": "L'orazépam",
+  "example_post": "LORAZEPAM"
+ },
+ {
+  "id": "5977a3f9-9963-5282-92dd-94c7764dcfe9",
+  "trigger": "(?i)\\bloras[eé]pam\\b",
+  "replacement": "LORAZEPAM",
+  "example_pre": "Lorasépam",
+  "example_post": "LORAZEPAM"
+ },
+ {
+  "id": "91ed2107-57bf-5432-bfa3-96b699748c04",
+  "trigger": "(?i)\\bbenzodies?\\s+[eé]pines?\\b",
+  "replacement": "benzodiazépine",
+  "example_pre": "Benzodies épines",
+  "example_post": "benzodiazépine"
+ },
+ {
+  "id": "bfb9866d-8f60-5ab6-ac0c-6dde431923d9",
+  "trigger": "(?i)\\bcathy\\s*[aà]pins?\\b",
+  "replacement": "QUETIAPINE",
+  "example_pre": "Cathyapin",
+  "example_post": "QUETIAPINE"
+ },
+ {
+  "id": "8f32f7d9-f817-59ab-9c48-462bf4dad1d4",
+  "trigger": "(?i)\\ble\\s+long[sz][eé]pines?\\b",
+  "replacement": "OLANZAPINE",
+  "example_pre": "le longzépine",
+  "example_post": "OLANZAPINE"
+ },
+ {
+  "id": "cb285582-5bc6-53e7-97c5-67310f6e2c27",
+  "trigger": "(?i)[.,?!;]*ouvr(ir|es?|ez|er|é|ée|és|ées|ais|ait)(?:les?|[.,?!;\\s])+guill(em)?ets?[.,?!;\\s]*",
+  "replacement": "\"",
+  "example_pre": "ouvrez les guillemets ",
+  "example_post": "\""
+ },
+ {
+  "id": "39187cb0-9c6b-58ea-82a5-7bdf532778f4",
+  "trigger": "(?i)[.,?!;\\s]*ferm(e|es|ez|er|é|ée|és|ées|ais|ait)(?:les?|[.,?!;\\s])+guill(em)?ets?[.,?!;]*",
+  "replacement": "\"",
+  "example_pre": "fermez les guillemets ",
+  "example_post": "\" "
+ },
+ {
+  "id": "23eb00d7-5713-5862-8ece-aa8ec7fdfb55",
+  "trigger": "(?i)[.,?!;]*début(?:des?|[.,?!;\\s])+citations?[.,?!;\\s]*",
+  "replacement": "\"",
+  "example_pre": "début des citations ",
+  "example_post": "\""
+ },
+ {
+  "id": "0d56a6d1-04bb-5b09-b991-3a9097a1e923",
+  "trigger": "(?i)[.,?!;\\s]*fin(?:des?|[.,?!;\\s])+citations?",
+  "replacement": "\"",
+  "example_pre": "fin des citations",
+  "example_post": "\""
+ },
+ {
+  "id": "57ade23f-ced6-5c02-abf6-36bc8d1e0e15",
+  "trigger": "(?i)[.,?!;\\s]+ouvr(ir|es?|ez|er|é|ée|és|ées|ais|ait)(?:la|les||[.,?!;\\s])+parenthèses?[.,?!;\\s]*",
+  "replacement": " (",
+  "example_pre": "mot ouvrez la parenthèse ",
+  "example_post": "mot ("
+ },
+ {
+  "id": "13698767-1cd9-5f38-b601-10fe7ebb385b",
+  "trigger": "(?i)^ouvr(ir|es?|ez|er|é|ée|és|ées|ais|ait)(?:la|les||[.,?!;\\s])+parenthèses?[.,?!;\\s]*",
+  "replacement": "(",
+  "example_pre": "ouvrez la parenthèse ",
+  "example_post": "("
+ },
+ {
+  "id": "11591fe8-5c44-5112-9b55-66d6467ed8ba",
+  "trigger": "(?i)[.,?!;\\s]*ferm(e|es|ez|er|é|ée|és|ées|ais|ait)(?:la|les||[.,?!;\\s])+parenthèses?[.,?!;]*",
+  "replacement": ")",
+  "example_pre": "fermez la parenthèse ",
+  "example_post": ") "
+ },
+ {
+  "id": "845b084a-44a9-54e1-82c4-320628ffe32a",
+  "trigger": "(?i)(dièses?|hashtag)-?",
+  "replacement": "#",
+  "example_pre": "dièse ",
+  "example_post": "# "
+ },
+ {
+  "id": "80180ebc-dad9-580f-8e86-c9efaf8f7010",
+  "trigger": "(?i)[.,?!;\\s]*nouveaux?\\s+tir(?:ets?|ée?s?|er)[.,?!;\\s]*",
+  "replacement": "- ",
+  "example_pre": "nouveaux tiret",
+  "example_post": "- "
+ },
+ {
+  "id": "18967cdd-23f9-522b-b7a2-14b93cd4b065",
+  "trigger": "(?i)[.,?!;\\s]*(traits?|très)\\s+d'union[.,?!;\\s]*",
+  "replacement": "-",
+  "example_pre": "trait d'union",
+  "example_post": "-"
+ },
+ {
+  "id": "ee154737-0902-5933-8db2-cb7e30f62485",
+  "trigger": "(?i)(?:^|[.,?!;\\s]+)(deux|2)(\\s*poin(ts|t|g|gs)|\\.)[.,?!;\\s]*",
+  "replacement": " : ",
+  "example_pre": "deux points",
+  "example_post": " : "
+ },
+ {
+  "id": "c0ea530b-c157-5bc9-9944-6553cb93147f",
+  "trigger": "(?i)[.,?!;\\s]*points?[-\\s]+virgules?[.,?!;\\s]*",
+  "replacement": " ; ",
+  "example_pre": "point virgule",
+  "example_post": " ; "
+ },
+ {
+  "id": "2e683172-5a2d-5c71-aeb7-7801a3e511e4",
+  "trigger": "(?i)[.,?!;\\s]*points?\\s+d'interrogations?[.,?!;\\s]*",
+  "replacement": " ? ",
+  "example_pre": "mot point d'interrogation ",
+  "example_post": "mot ? "
+ },
+ {
+  "id": "6d3adfe3-ba0f-5517-a996-19a3a7baf2a9",
+  "trigger": "(?i)[.,?!;\\s]*points?\\s+d'exclamations?[.,?!;\\s]*",
+  "replacement": " ! ",
+  "example_pre": "mot point d'exclamation",
+  "example_post": "mot ! "
+ },
+ {
+  "id": "f9f2eb9a-fb1c-5b6d-b25b-97f65262fe5b",
+  "trigger": "(?i)[.,?!;\\s]*points?\\s+finals?[.,?!;\\s]*",
+  "replacement": ". ",
+  "example_pre": "point final",
+  "example_post": ". "
+ },
+ {
+  "id": "7564f834-44e9-5b76-8976-db857933c29b",
+  "trigger": "(?i)[.,?!;\\s]*(?:(?:trois|3)\\s+(?:petits?\\s+)?points|points?\\s+de\\s+suspensions?)[.,?!;\\s]*",
+  "replacement": "... ",
+  "example_pre": "trois points",
+  "example_post": "... "
+ },
+ {
+  "id": "25059dfc-ac52-577f-9cf1-9d670dd884b5",
+  "trigger": "(?i)[.,?!;\\s]*points?[.,?!;\\s]*",
+  "replacement": ". ",
+  "example_pre": "mot point",
+  "example_post": "mot. "
+ },
+ {
+  "id": "0d95c51e-5d18-5a9a-a3df-f58e1ac8832a",
+  "trigger": "(?i)[.,?!;\\s]*ajoute\\s+la\\s+commande\\s+examen\\s+infectieux[.,?!;\\s]*",
+  "replacement": "Recherche de point d'appel infectieux\n-Pulmonaire : auscultation claire, pas de toux pas de crachat, radiopulmonaire sans foyer parenchymateux\n-Urinaire : pas de signe fonctionnel, bandelette urinaire normale\n-Cutané : pas de rash, pas d'éruption, pas d'érésipèle retrouvé sur le corps\n-Abdominal : pas de vomissement, pas de diarrhée, abdomen reste souple et dépressible, pas d'ictère\n-Méningé : pas de raideur de nuque, pas de purpura, pas de trouble de la conscience\n-Cardio vasculaire : pas de nouveau souffle à l'auscultation cardiaque\n-ORL : pas de pharyngite pas d'angine pas de rhinite, absence d'otalgie\n",
+  "example_pre": "Ajoute la commande examen infectieux.",
+  "example_post": "Recherche de point d'appel infectieux\n-Pulmonaire : auscultation claire, pas de toux pas de crachat, radiopulmonaire sans foyer parenchymateux\n-Urinaire : pas de signe fonctionnel, bandelette urinaire normale\n-Cutané : pas de rash, pas d'éruption, pas d'érésipèle retrouvé sur le corps\n-Abdominal : pas de vomissement, pas de diarrhée, abdomen reste souple et dépressible, pas d'ictère\n-Méningé : pas de raideur de nuque, pas de purpura, pas de trouble de la conscience\n-Cardio vasculaire : pas de nouveau souffle à l'auscultation cardiaque\n-ORL : pas de pharyngite pas d'angine pas de rhinite, absence d'otalgie\n"
+ },
+ {
+  "id": "59f6faaa-4c20-544a-81e2-77f8df0c62ca",
+  "trigger": "(?i)[.,?!;\\s]*(?:vie?rgul(es?|as?|in)|viandules?|viagnules?)[.,?!;\\s]*",
+  "replacement": ", ",
+  "example_pre": "motvirgule",
+  "example_post": "mot, "
+ },
+ {
+  "id": "01670a6b-a564-5cff-b7db-b142c750c0a3",
+  "trigger": "(?i)\\s*slash\\s*",
+  "replacement": "/",
+  "example_pre": " slash ",
+  "example_post": "/"
+ },
+ {
+  "id": "045c3d1c-f058-52f1-8e67-9eb07423b36a",
+  "trigger": "(?i)\\s*(?:retours?\\s+|all(?:er|ez)\\s+)?[àa]\\s+la\\s+lignes?[.,?!;\\s]*",
+  "replacement": "\n",
+  "example_pre": " à la ligne ",
+  "example_post": "\n"
+ },
+ {
+  "id": "45429afc-9998-57cc-b4d4-3b13680f04b2",
+  "trigger": "(?i)\\s*(?:sautes?|sceau)\\sune\\slignes?[.,?!;\\s]*",
+  "replacement": "\n",
+  "example_pre": " saute une ligne ",
+  "example_post": "\n"
+ },
+ {
+  "id": "beb32acc-4819-52d7-8c85-ddf21754b7f1",
+  "trigger": "(?i)\\s*(?:saut|sceau)\\sde\\slignes?[.,?!;\\s]*",
+  "replacement": "\n\n",
+  "example_pre": " saut de ligne ",
+  "example_post": "\n\n"
+ },
+ {
+  "id": "b61b84c5-1f32-5630-8746-8589a8cdb597",
+  "trigger": "\\barr[eê]t\\s+cardio(\\s+|-)?respiratoire\\b",
+  "replacement": "ACR",
+  "example_pre": "arrêt cardio respiratoire",
+  "example_post": "ACR"
+ },
+ {
+  "id": "7de19866-e956-5390-a740-cbb1a8247574",
+  "trigger": "à uriginosa",
+  "replacement": "aeruginosa",
+  "example_pre": "à uriginosa",
+  "example_post": "aeruginosa"
+ },
+ {
+  "id": "eed4576a-5455-5974-b322-d7debf27f141",
+  "trigger": "A graphage",
+  "replacement": "agrafage",
+  "example_pre": "A graphage",
+  "example_post": "agrafage"
+ },
+ {
+  "id": "062cf3ba-f0ef-530f-aa77-97926ac55fba",
+  "trigger": "angéoplasti(e)?",
+  "replacement": "angioplastie",
+  "example_pre": "angéoplastie",
+  "example_post": "angioplastie"
+ },
+ {
+  "id": "12890fde-8522-5b51-bbd9-269dc1b05d51",
+  "trigger": "antihistéminique",
+  "replacement": "antihistaminique",
+  "example_pre": "antihistéminique",
+  "example_post": "antihistaminique"
+ },
+ {
+  "id": "9e65cc46-bf81-540f-bbb1-75d3768c4860",
+  "trigger": "onxiolyse",
+  "replacement": "anxiolyse",
+  "example_pre": "onxiolyse",
+  "example_post": "anxiolyse"
+ },
+ {
+  "id": "f5879946-d175-584b-bfff-f6a4ef3dc665",
+  "trigger": "\\bunses",
+  "replacement": "anses",
+  "example_pre": "unses",
+  "example_post": "anses"
+ },
+ {
+  "id": "3c86f468-ab6e-5288-97c4-6750041718fd",
+  "trigger": "\\bavait\\s+ces\\b",
+  "replacement": "AVC",
+  "example_pre": "avait ces",
+  "example_post": "AVC"
+ },
+ {
+  "id": "55b0b67e-a43b-58bd-9a41-585e35c0fdb3",
+  "trigger": "collectomie",
+  "replacement": "colectomie",
+  "example_pre": "collectomie",
+  "example_post": "colectomie"
+ },
+ {
+  "id": "09a59860-24fc-5246-ba51-d35123a81d33",
+  "trigger": "\\bcollon",
+  "replacement": "colon",
+  "example_pre": "collon",
+  "example_post": "colon"
+ },
+ {
+  "id": "34334a5c-0fe9-5008-be1a-ea08bcc81a7f",
+  "trigger": "copro culture",
+  "replacement": "coproculture",
+  "example_pre": "copro culture",
+  "example_post": "coproculture"
+ },
+ {
+  "id": "89897de7-5c80-5db6-ac3f-33c4055690b8",
+  "trigger": "coroner",
+  "replacement": "coronaire",
+  "example_pre": "coroner",
+  "example_post": "coronaire"
+ },
+ {
+  "id": "b1ec5eb7-9e5c-5f9b-9b75-198b9664f4d0",
+  "trigger": "durologie",
+  "replacement": "d'urologie",
+  "example_pre": "durologie",
+  "example_post": "d'urologie"
+ },
+ {
+  "id": "99ee9512-ed67-5d4e-8a1d-879aa9ebd313",
+  "trigger": "Dis l'épidémie",
+  "replacement": "dyslipidémie",
+  "example_pre": "Dis l'épidémie",
+  "example_post": "dyslipidémie"
+ },
+ {
+  "id": "6149ff96-2cbc-5539-9028-c9aaa40c396f",
+  "trigger": "10 l'épidémie",
+  "replacement": "dyslipidémie",
+  "example_pre": "10 l'épidémie",
+  "example_post": "dyslipidémie"
+ },
+ {
+  "id": "786cb406-f142-5283-809a-e83e26866d5e",
+  "trigger": "\\b(?:disney|disn[eé]e?|dysn[eé]e?)\\b",
+  "replacement": "dyspnée",
+  "example_pre": "disney",
+  "example_post": "dyspnée"
+ },
+ {
+  "id": "d7b66139-f73c-52cf-98bc-18860484e174",
+  "trigger": "des cubitus",
+  "replacement": "décubitus",
+  "example_pre": "des cubitus",
+  "example_post": "décubitus"
+ },
+ {
+  "id": "c63ebe88-64c0-5fcf-8ab1-4729ff2ce19a",
+  "trigger": "eukoli",
+  "replacement": "E. Coli",
+  "example_pre": "eukoli",
+  "example_post": "E. Coli"
+ },
+ {
+  "id": "c57d6d23-7c37-584a-a45c-f138a32397ef",
+  "trigger": "oeu koli",
+  "replacement": "E. Coli",
+  "example_pre": "oeu koli",
+  "example_post": "E. Coli"
+ },
+ {
+  "id": "04b6a0bb-7d13-573c-85a3-a92a02f1a2e5",
+  "trigger": "\\bfraction\\s+d['']ejection\\s+(\\d+)\\s+pour\\s+cent\\b",
+  "replacement": "FEVG : $1%",
+  "example_pre": "fraction d'ejection 55 pour cent",
+  "example_post": "FEVG : 55%"
+ },
+ {
+  "id": "dd6f45a3-1eeb-54c3-89eb-fc995088572b",
+  "trigger": "H T A",
+  "replacement": "HTA",
+  "example_pre": "H T A",
+  "example_post": "HTA"
+ },
+ {
+  "id": "feb8ec21-2f71-5f13-908e-721aff1ce6d5",
+  "trigger": "ématurie",
+  "replacement": "hématurie",
+  "example_pre": "ématurie",
+  "example_post": "hématurie"
+ },
+ {
+  "id": "61c400f9-7068-571b-8202-72fe5168c937",
+  "trigger": "\\b[éÉ]moculture",
+  "replacement": "hémoculture",
+  "example_pre": "émoculture",
+  "example_post": "hémoculture"
+ },
+ {
+  "id": "964a1b2c-b6f3-5a4e-ab1d-dc6434c85c19",
+  "trigger": "hyperphygique",
+  "replacement": "hyperphagique",
+  "example_pre": "hyperphygique",
+  "example_post": "hyperphagique"
+ },
+ {
+  "id": "df1b8307-4404-5119-a70d-6be958c43621",
+  "trigger": "un [cC]urique",
+  "replacement": "incurique",
+  "example_pre": "un Curique",
+  "example_post": "incurique"
+ },
+ {
+  "id": "8619b947-fce6-596f-b6cb-5e9014b1be48",
+  "trigger": "litavale",
+  "replacement": "lit d'aval",
+  "example_pre": "litavale",
+  "example_post": "lit d'aval"
+ },
+ {
+  "id": "496783eb-eaa5-5d0d-8b91-5a203d6da2d1",
+  "trigger": "monokryl",
+  "replacement": "monocryl",
+  "example_pre": "monokryl",
+  "example_post": "monocryl"
+ },
+ {
+  "id": "2e633f18-e5e8-5c5e-80a7-09ff304321db",
+  "trigger": "Moralba",
+  "replacement": "moral bas",
+  "example_pre": "Moralba",
+  "example_post": "moral bas"
+ },
+ {
+  "id": "e760e3f6-820e-5144-9904-17feaea83b26",
+  "trigger": "(?i)norm(al|o)?\\s?card\\b",
+  "replacement": "normocarde",
+  "example_pre": "normalcard",
+  "example_post": "normocarde"
+ },
+ {
+  "id": "3282efd0-7ef3-5a56-8c28-f99683628cef",
+  "trigger": "\\bEdem\\b",
+  "replacement": "oedème",
+  "example_pre": "Edem",
+  "example_post": "oedème"
+ },
+ {
+  "id": "bbfd2e4d-d849-5fcc-8ec5-b517acf5da6a",
+  "trigger": "oraillette",
+  "replacement": "oreillette",
+  "example_pre": "oraillette",
+  "example_post": "oreillette"
+ },
+ {
+  "id": "e0865344-25cf-5fa7-8a2a-54520af3cba7",
+  "trigger": "ostéum",
+  "replacement": "ostium",
+  "example_pre": "ostéum",
+  "example_post": "ostium"
+ },
+ {
+  "id": "1e5aea88-e663-5c00-b007-802ae8c93bef",
+  "trigger": "parié étocolique",
+  "replacement": "periétocolique",
+  "example_pre": "parié étocolique",
+  "example_post": "periétocolique"
+ },
+ {
+  "id": "ec2826c6-c593-511d-b5fc-5f21b48c92d6",
+  "trigger": "P I H",
+  "replacement": "PIH",
+  "example_pre": "P I H",
+  "example_post": "PIH"
+ },
+ {
+  "id": "d26766b8-a9a4-5d2c-b5a0-019d4d8b4391",
+  "trigger": "polypné",
+  "replacement": "polypnée",
+  "example_pre": "polypné",
+  "example_post": "polypnée"
+ },
+ {
+  "id": "ceef0781-096c-5d3a-8635-404e513a07a4",
+  "trigger": "P T H",
+  "replacement": "PTH",
+  "example_pre": "P T H",
+  "example_post": "PTH"
+ },
+ {
+  "id": "4de546dd-499c-5528-a056-300c1a7a5805",
+  "trigger": "\\brain",
+  "replacement": "rein",
+  "example_pre": "rain",
+  "example_post": "rein"
+ },
+ {
+  "id": "c2387ab7-f080-553a-8169-107407f23faa",
+  "trigger": "seuvrer",
+  "replacement": "sevrer",
+  "example_pre": "seuvrer",
+  "example_post": "sevrer"
+ },
+ {
+  "id": "6a181fa2-3015-578d-96fa-9e32c72fc308",
+  "trigger": "(?i)\\btaquipsi\\b",
+  "replacement": "tachypsychie",
+  "example_pre": "Taquipsi",
+  "example_post": "tachypsychie"
+ },
+ {
+  "id": "22b5b2d4-02ff-5075-b298-799402f4d89b",
+  "trigger": "tard différent",
+  "replacement": "tardyferon",
+  "example_pre": "tard différent",
+  "example_post": "tardyferon"
+ },
+ {
+  "id": "6551c21f-8b60-513f-b713-73e87f308ae9",
+  "trigger": "thrombophlébide",
+  "replacement": "thrombophlébite",
+  "example_pre": "thrombophlébide",
+  "example_post": "thrombophlébite"
+ },
+ {
+  "id": "fed2a4e2-6f82-5cfb-ba73-ff3dee8a689a",
+  "trigger": "Tromboflébite",
+  "replacement": "thrombophlébite",
+  "example_pre": "Tromboflébite",
+  "example_post": "thrombophlébite"
+ },
+ {
+  "id": "082f3131-8a0a-58d3-bad7-0e6209322e4b",
+  "trigger": "\\bthimique",
+  "replacement": "thymique",
+  "example_pre": "thimique",
+  "example_post": "thymique"
+ },
+ {
+  "id": "874e7f7c-4d78-5256-af86-de95257cec06",
+  "trigger": "timmy",
+  "replacement": "TIMI",
+  "example_pre": "timmy",
+  "example_post": "TIMI"
+ },
+ {
+  "id": "77bece52-5ed6-5db3-875a-04d5929bff18",
+  "trigger": "tricuspeed",
+  "replacement": "tricuspide",
+  "example_pre": "tricuspeed",
+  "example_post": "tricuspide"
+ },
+ {
+  "id": "e62ff401-877f-5903-9235-a57091bffcdc",
+  "trigger": "épiplombs",
+  "replacement": "épiploons",
+  "example_pre": "épiplombs",
+  "example_post": "épiploons"
+ },
+ {
+  "id": "bc3c6d7c-6b16-5125-81f3-3e0e08b9b660",
+  "trigger": "épi plombs",
+  "replacement": "épiploons",
+  "example_pre": "épi plombs",
+  "example_post": "épiploons"
+ },
+ {
+  "id": "af383731-95f2-5d53-b906-da9fd7d196ff",
+  "trigger": "(?i)\\bhyper\\s*aurexie\\b",
+  "replacement": "hyperorexie",
+  "example_pre": "hyper aurexie",
+  "example_post": "hyperorexie"
+ },
+ {
+  "id": "618c8c4d-6608-5c04-b6fc-ccf14e17da25",
+  "trigger": "(?i)\\bet\\s*domadaire\\b",
+  "replacement": "hebdomadaire",
+  "example_pre": "et domadaire",
+  "example_post": "hebdomadaire"
+ },
+ {
+  "id": "d0331900-989f-5193-8120-7fe5d62ecef2",
+  "trigger": "(?i)\\bexcès\\s*hyper\\s*phagie\\b",
+  "replacement": "accès hyperphagique",
+  "example_pre": "excès hyper phagie",
+  "example_post": "accès hyperphagique"
+ },
+ {
+  "id": "a53fe5a1-719b-5d5b-8069-b70c44bdff83",
+  "trigger": "(?i)\\bgastro.entérogue\\b",
+  "replacement": "gastro-entérologue",
+  "example_pre": "gastro-entérogue",
+  "example_post": "gastro-entérologue"
+ },
+ {
+  "id": "5aa77362-ca73-59c0-8ea2-1309546eb0e3",
+  "trigger": "(?i)\\bpasiente\\b",
+  "replacement": "patiente",
+  "example_pre": "pasiente",
+  "example_post": "patiente"
+ },
+ {
+  "id": "b0ddb695-6d2f-5481-b40f-4e20d85a29d0",
+  "trigger": "(?i)\\bà\\s*motivationnel\\b",
+  "replacement": "amotivationnel",
+  "example_pre": "à motivationnel",
+  "example_post": "amotivationnel"
+ },
+ {
+  "id": "736b3957-1ca1-50a2-8960-5dddc72696cc",
+  "trigger": "(?i)\\b6\\s+besoins?\\b",
+  "replacement": "si-besoins",
+  "example_pre": "6 besoins",
+  "example_post": "si-besoins"
+ },
+ {
+  "id": "784b7c2b-c099-549e-a06b-d4ea2e69c9b9",
+  "trigger": "(?i)\\bpar\\s+soir\\b",
+  "replacement": "/soir",
+  "example_pre": "par soir",
+  "example_post": "/soir"
+ }
+]

@@ -33,6 +33,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { FormattingRule } from './types';
+import { MedicalRules } from '../medical-rules/medical-rules';
 
 interface SortableRuleCardProps {
     rule: FormattingRule;
@@ -127,6 +128,28 @@ export const FormattingRules = () => {
             >
                 {activeTab === 'general' && (
                     <div className="space-y-3">
+                        <SettingsUI.Container>
+                            <SettingsUI.Item>
+                                <SettingsUI.Description className="w-150">
+                                    <Typography.Title>{t('Fix drug names and medical terms')}</Typography.Title>
+                                    <Typography.Paragraph>
+                                        {t(
+                                            'Corrects misheard French drug names and medical terms with about 40,000 bundled rules.'
+                                        )}
+                                        <span className="block text-xs text-muted-foreground mt-1">
+                                            {t('Example: "respéridone" → "rispéridone"')}
+                                        </span>
+                                    </Typography.Paragraph>
+                                </SettingsUI.Description>
+                                <Switch
+                                    checked={settings.built_in.medical_fixes}
+                                    onCheckedChange={(checked) => updateBuiltInOption('medical_fixes', checked)}
+                                    data-testid="option-medical-fixes"
+                                />
+                            </SettingsUI.Item>
+                        </SettingsUI.Container>
+                        {settings.built_in.medical_fixes && <MedicalRules />}
+
                         <SettingsUI.Container>
                             <SettingsUI.Item>
                                 <SettingsUI.Description className="w-150">

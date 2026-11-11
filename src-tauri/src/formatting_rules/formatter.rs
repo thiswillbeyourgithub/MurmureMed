@@ -45,6 +45,11 @@ fn apply_short_text_correction(text: String) -> String {
 pub fn apply_formatting(text: String, settings: &FormattingSettings) -> String {
     let mut result = text;
 
+    // MurmureMed: fix drug names and medical terms first, on the raw model output
+    if settings.built_in.medical_fixes {
+        result = crate::medical::apply_medical_fixes(result);
+    }
+
     // 1. Short text correction (configurable threshold, 0 = disabled)
     let threshold = settings.built_in.short_text_correction;
     let word_count = result.split_whitespace().count();
@@ -429,5 +434,18 @@ mod tests {
     fn smart_mode_strips_trailing_punctuation() {
         let result = apply_custom_rule("hello world.", "world", "earth", &MatchMode::Smart);
         assert_eq!(result, "hello earth");
+    }
+
+    #[test]
+    fn medical_fixes_toggle() {
+        let text = "Sous respéridone le soir.";
+        let mut settings = make_settings(0);
+        settings.built_in.trailing_space = false;
+        assert_eq!(
+            apply_formatting(text.to_string(), &settings),
+            "Sous rispéridone le soir."
+        );
+        settings.built_in.medical_fixes = false;
+        assert_eq!(apply_formatting(text.to_string(), &settings), text);
     }
 }
