@@ -1,5 +1,7 @@
 use super::types::{FormattingSettings, MatchMode};
 use regex::Regex;
+use std::collections::HashMap;
+use std::sync::{LazyLock, Mutex};
 use text2num::{replace_numbers_in_text, Language};
 
 /// Apply short text correction: for transcriptions with word count <= max_words,
@@ -120,6 +122,50 @@ fn add_space_before_punctuation(text: &str) -> String {
     result
 }
 
+/// Upper bound on cached patterns. Only reached after many rule edits (every
+/// edited trigger adds a new pattern); the cache is then cleared and refilled.
+const REGEX_CACHE_CAPACITY: usize = 4096;
+
+/// Compiled patterns keyed by their source, so each rule is compiled once
+/// instead of on every transcription. Invalid patterns are cached as `None`.
+struct RegexCache {
+    compiled: HashMap<String, Option<Regex>>,
+    capacity: usize,
+}
+
+impl RegexCache {
+    fn new(capacity: usize) -> Self {
+        Self {
+            compiled: HashMap::new(),
+            capacity,
+        }
+    }
+
+    /// `Regex` clones are cheap (shared internals), so callers get their own handle.
+    fn get_or_compile(&mut self, pattern: &str) -> Option<Regex> {
+        if let Some(compiled) = self.compiled.get(pattern) {
+            return compiled.clone();
+        }
+        if self.compiled.len() >= self.capacity {
+            self.compiled.clear();
+        }
+        let compiled = Regex::new(pattern).ok();
+        self.compiled.insert(pattern.to_string(), compiled.clone());
+        compiled
+    }
+}
+
+static REGEX_CACHE: LazyLock<Mutex<RegexCache>> =
+    LazyLock::new(|| Mutex::new(RegexCache::new(REGEX_CACHE_CAPACITY)));
+
+fn cached_regex(pattern: &str) -> Option<Regex> {
+    let mut cache = match REGEX_CACHE.lock() {
+        Ok(guard) => guard,
+        Err(poisoned) => poisoned.into_inner(),
+    };
+    cache.get_or_compile(pattern)
+}
+
 /// Apply a custom rule based on the match mode
 /// - Exact:  Simple string replace (e.g., "*" -> "")
 /// - Smart:  Replace with surrounding punctuation handling (case-insensitive)
@@ -138,19 +184,19 @@ pub(super) fn apply_custom_rule(
                 r"(?i)(?P<pre>(?:[,\.]\s|\s)?){escaped}[,\.]?",
                 escaped = escaped_trigger
             );
-            match Regex::new(&pattern) {
-                Ok(re) if replacement.is_empty() => re.replace_all(text, "").to_string(),
-                Ok(re) => {
+            match cached_regex(&pattern) {
+                Some(re) if replacement.is_empty() => re.replace_all(text, "").to_string(),
+                Some(re) => {
                     let escaped = replacement.replace("$", "$$");
                     let replacement = format!("${{pre}}{}", escaped);
                     re.replace_all(text, replacement.as_str()).to_string()
                 }
-                Err(_) => text.to_string(),
+                None => text.to_string(),
             }
         }
-        MatchMode::Regex => match Regex::new(trigger) {
-            Ok(re) => re.replace_all(text, replacement).to_string(),
-            Err(_) => text.to_string(),
+        MatchMode::Regex => match cached_regex(trigger) {
+            Some(re) => re.replace_all(text, replacement).to_string(),
+            None => text.to_string(),
         },
     }
 }
@@ -331,6 +377,52 @@ mod tests {
     fn smart_mode_case_insensitive() {
         let result = apply_custom_rule("Hello WORLD test", "world", "earth", &MatchMode::Smart);
         assert_eq!(result, "Hello earth test");
+    }
+
+    #[test]
+    fn regex_cache_compiles_pattern_once() {
+        let mut cache = RegexCache::new(8);
+        let first = cache.get_or_compile(r"a(\d)").unwrap();
+        let second = cache.get_or_compile(r"a(\d)").unwrap();
+        assert_eq!(cache.compiled.len(), 1);
+        assert_eq!(first.as_str(), second.as_str());
+    }
+
+    #[test]
+    fn regex_cache_stores_invalid_pattern_as_none() {
+        let mut cache = RegexCache::new(8);
+        assert!(cache.get_or_compile("(").is_none());
+        assert!(cache.compiled.get("(").unwrap().is_none());
+    }
+
+    #[test]
+    fn regex_cache_stays_bounded() {
+        let mut cache = RegexCache::new(3);
+        for i in 0..10 {
+            cache.get_or_compile(&format!("p{i}"));
+        }
+        assert!(cache.compiled.len() <= 3);
+        assert!(cache.get_or_compile("p0").is_some());
+    }
+
+    #[test]
+    fn regex_mode_gives_same_result_on_repeated_calls() {
+        for _ in 0..2 {
+            assert_eq!(
+                apply_custom_rule("item 42", r"item (\d+)", "#$1", &MatchMode::Regex),
+                "#42"
+            );
+        }
+    }
+
+    #[test]
+    fn regex_mode_invalid_pattern_leaves_text_unchanged() {
+        for _ in 0..2 {
+            assert_eq!(
+                apply_custom_rule("hello", "(", "x", &MatchMode::Regex),
+                "hello"
+            );
+        }
     }
 
     #[test]
