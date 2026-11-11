@@ -214,9 +214,9 @@ fn apply_directive(body: &str, list: &mut BoostList) {
         }
         "commitment" => match value.trim().parse::<f32>() {
             Ok(c) if (0.0..=1.0).contains(&c) => list.commitment = Some(c),
-            _ => list
-                .warnings
-                .push(format!("#!commitment {value}: not a number in [0, 1], ignored")),
+            _ => list.warnings.push(format!(
+                "#!commitment {value}: not a number in [0, 1], ignored"
+            )),
         },
         _ => {}
     }
@@ -506,7 +506,10 @@ mod tests {
 
     #[test]
     fn commitment_directive_is_parsed_and_validated() {
-        assert_eq!(parse_boost_list("#!commitment 0\nfoo").commitment, Some(0.0));
+        assert_eq!(
+            parse_boost_list("#!commitment 0\nfoo").commitment,
+            Some(0.0)
+        );
         assert_eq!(parse_boost_list("#!commitment=0.5").commitment, Some(0.5));
         assert_eq!(parse_boost_list("foo").commitment, None);
         let bad = parse_boost_list("#!commitment 2\nfoo");
