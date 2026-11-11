@@ -10,6 +10,12 @@
 //! token earns little (one token of four is thin evidence, and a standing
 //! bonus on common first tokens inserts spurious words), a completed phrase
 //! earns its full depth-scaled weight.
+//!
+//! `COMMITMENT_SCALING` is ParakeetWeb's default; a list can override it
+//! (`#!commitment 0`: 1, 1.5, 2, 2.5). With greedy decoding a phrase whose
+//! first token loses is never entered, so its deeper bonuses never fire:
+//! on the UltiMed validation clips, commitment 0 with min-p 0.01 found more
+//! medical terms and lowered the WER of the big French medical list.
 
 use super::list::DEFAULT_BOOST_MIN_P;
 
@@ -65,17 +71,22 @@ pub struct BoostingTrie {
 
 impl BoostingTrie {
     pub fn new(phrases: &[EncodedPhrase]) -> Self {
+        Self::with_commitment(phrases, COMMITMENT_SCALING)
+    }
+
+    /// `commitment` in [0, 1]: 1 ramps the bonus with `d / L`, 0 disables the ramp.
+    pub fn with_commitment(phrases: &[EncodedPhrase], commitment: f32) -> Self {
         let mut trie = Self {
             nodes: vec![Node::new()],
             min_minp: 1.0,
         };
         for phrase in phrases.iter().filter(|p| !p.ids.is_empty()) {
-            trie.insert(phrase);
+            trie.insert(phrase, commitment);
         }
         trie
     }
 
-    fn insert(&mut self, phrase: &EncodedPhrase) {
+    fn insert(&mut self, phrase: &EncodedPhrase, commitment: f32) {
         self.min_minp = self.min_minp.min(phrase.minp);
         let len = phrase.ids.len() as f32;
         let mut node = ROOT;
@@ -85,7 +96,7 @@ impl BoostingTrie {
                 None => self.add_child(node, id),
             };
             let depth = (i + 1) as f32;
-            let committed = 1.0 - COMMITMENT_SCALING * (1.0 - depth / len);
+            let committed = 1.0 - commitment * (1.0 - depth / len);
             let bonus = phrase.weight * committed * (1.0 + DEPTH_SCALING * (depth - 1.0));
             let n = &mut self.nodes[child as usize];
             let prev_mag = n.pos.max(-n.neg);
@@ -227,6 +238,15 @@ mod tests {
         let active = trie.advance(&active, 999);
         assert_eq!(active, vec![ROOT]);
         assert_eq!(trie.boost_for(&active, 11), None);
+    }
+
+    #[test]
+    fn zero_commitment_gives_the_first_token_its_full_weight() {
+        let trie = BoostingTrie::with_commitment(&[phrase(&SIX, 2.0)], 0.0);
+        let active = trie.start();
+        close(trie.boost_for(&active, 10).unwrap().0, 2.0);
+        let active = trie.advance(&active, 10);
+        close(trie.boost_for(&active, 11).unwrap().0, 2.0 * 1.5);
     }
 
     #[test]

@@ -7,7 +7,9 @@
 //! `ratio 3`, `bad:abc` is the phrase `bad:abc`). Empty fields keep the
 //! default (`a::0.2`). A `*:WEIGHT:MINP:AUG` line sets the defaults of the
 //! lines below it. `#!prefixes l' d'` sets the elision prefixes of the `p`
-//! augmentation; any other `#!` line is a comment.
+//! augmentation; `#!commitment 0` sets how much the first tokens of a phrase
+//! are held back (MurmureMed extension, see `trie`; ParakeetWeb reads it as a
+//! comment); any other `#!` line is a comment.
 //!
 //! AUG flags: `f` Title Case, `a` ALL CAPS, `p` elision prefixes, `h` symbols
 //! replaced by spaces, `n` French plurals, `i` all of them, `s` none.
@@ -54,11 +56,13 @@ pub struct BoostPhrase {
     pub augment: Option<String>,
 }
 
-/// A parsed list: its phrases plus the `#!prefixes` directive, if any.
+/// A parsed list: its phrases plus its `#!` directives, if any.
 #[derive(Debug, Clone, PartialEq)]
 pub struct BoostList {
     pub phrases: Vec<BoostPhrase>,
     pub prefixes: Option<Vec<String>>,
+    /// Commitment scaling in [0, 1] (`#!commitment`); `None` = trie default.
+    pub commitment: Option<f32>,
     /// One message per line whose weight or min-p was invalid and replaced.
     pub warnings: Vec<String>,
 }
@@ -189,15 +193,33 @@ fn apply_defaults_line(trimmed: &str, defaults: &mut Fields) {
     }
 }
 
-fn parse_prefixes_directive(body: &str) -> Option<Vec<String>> {
+/// `name value` (or `name=value`, `name:value`) of a `#!` line, name lowercased.
+fn split_directive(body: &str) -> Option<(String, &str)> {
     let split = body.find(|c: char| c.is_whitespace() || c == '=' || c == ':')?;
-    if !body[..split].eq_ignore_ascii_case("prefixes") {
-        return None;
-    }
     let value =
         body[split..].trim_start_matches(|c: char| c.is_whitespace() || c == '=' || c == ':');
-    let list: Vec<String> = value.split_whitespace().map(str::to_string).collect();
-    (!list.is_empty()).then_some(list)
+    Some((body[..split].to_lowercase(), value))
+}
+
+fn apply_directive(body: &str, list: &mut BoostList) {
+    let Some((name, value)) = split_directive(body) else {
+        return;
+    };
+    match name.as_str() {
+        "prefixes" => {
+            let prefixes: Vec<String> = value.split_whitespace().map(str::to_string).collect();
+            if !prefixes.is_empty() {
+                list.prefixes = Some(prefixes);
+            }
+        }
+        "commitment" => match value.trim().parse::<f32>() {
+            Ok(c) if (0.0..=1.0).contains(&c) => list.commitment = Some(c),
+            _ => list
+                .warnings
+                .push(format!("#!commitment {value}: not a number in [0, 1], ignored")),
+        },
+        _ => {}
+    }
 }
 
 /// Parse a whole list (ParakeetWeb's `parseBoostPhrases` + `parseBoostDirectives`).
@@ -205,6 +227,7 @@ pub fn parse_boost_list(raw: &str) -> BoostList {
     let mut list = BoostList {
         phrases: Vec::new(),
         prefixes: None,
+        commitment: None,
         warnings: Vec::new(),
     };
     let mut defaults = Fields {
@@ -219,9 +242,7 @@ pub fn parse_boost_list(raw: &str) -> BoostList {
             continue;
         }
         if let Some(body) = trimmed.strip_prefix(DIRECTIVE_PREFIX) {
-            if let Some(prefixes) = parse_prefixes_directive(body.trim()) {
-                list.prefixes = Some(prefixes);
-            }
+            apply_directive(body.trim(), &mut list);
             continue;
         }
         if is_defaults_line(trimmed) {
@@ -481,6 +502,16 @@ mod tests {
                 ("ratio 3", 1.0, d, None),
             ]
         );
+    }
+
+    #[test]
+    fn commitment_directive_is_parsed_and_validated() {
+        assert_eq!(parse_boost_list("#!commitment 0\nfoo").commitment, Some(0.0));
+        assert_eq!(parse_boost_list("#!commitment=0.5").commitment, Some(0.5));
+        assert_eq!(parse_boost_list("foo").commitment, None);
+        let bad = parse_boost_list("#!commitment 2\nfoo");
+        assert_eq!(bad.commitment, None);
+        assert_eq!(bad.warnings.len(), 1);
     }
 
     #[test]
