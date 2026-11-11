@@ -49,3 +49,6 @@ CLAUDE.md
 # Release artifacts downloaded locally
 tmp-release/
 tmp-release-flat/
+
+# Personal local notes
+TODO.local.md
