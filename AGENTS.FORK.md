@@ -59,7 +59,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 | Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
 | ParakeetWeb phrase boosting engine (hybrid: upstream boost for the user dictionary, ParakeetWeb trie for phrase lists, larger bonus wins where they overlap) | `feat/phrase-boosting` (from `medmain`) | | merged | |
 | French medical phrase boosting list (bundled from ParakeetWeb, armed at model load, ~2 s trie build on the startup thread) | `feat/medical-phrase-list` | `feat/phrase-boosting` | merged | |
-| Branding (name, purple theme, fork credits, local-only notice, own identifier, updater and winget; icon and toggles for extra regex and phrase boosting still to do) | `feat/branding` (from `medmain`) | | merged, in progress | |
+| Branding (name Plumed, purple theme, fork credits, local-only notice, own identifier and keyring entry, updater and winget; icon and toggles for extra regex and phrase boosting still to do) | `feat/branding` (from `medmain`) | | merged, in progress | |
 | Remote microphone through an internet relay (or iroh) | `feat/remote-mic-relay` | | idea | |
 
 Update this table when a branch is created, merged, or proposed upstream.
@@ -80,7 +80,7 @@ Caveat: Windows Installer ignores the fourth number when deciding whether an MSI
 
 ## 6. Releases
 
-Identity: the app identifier is `org.olicorne.plumed` (own settings and history folder, separate from an installed Murmure). The product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too.
+Identity: the app identifier is `org.olicorne.plumed` (own settings and history folder, separate from an installed Murmure; the remote LLM API key also has its own keyring entry, `plumed`). The window title, tray and UI say Plumed, but the product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too. Renaming them means setting `productName` (and `mainBinaryName`) and then updating every path derived from it: the onnxruntime path `/usr/lib/murmure/` in `build-linux.yml`, the pacman marker in `platform.rs` and the AUR `PKGBUILD`, the `.desktop` migration in `postinst`, `prerm` and the `PKGBUILD`, the `Murmure_*` artifact names in the workflows. Check it with a local `.deb` build before releasing.
 
 Auto-updater (`plugins.updater` in `src-tauri/tauri.conf.json`): the app downloads `latest.json` from our latest GitHub release and only installs an update whose signature matches the `pubkey` in that file. One-time setup:
 
