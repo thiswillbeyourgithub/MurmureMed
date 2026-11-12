@@ -15,7 +15,7 @@ jobs:
             - name: Publish to WinGet
               uses: vedantmgoyal9/winget-releaser@4ffc7888bffd451b357355dc214d43bb9f23917e
               with:
-                  identifier: Olicorne.MurmureMed
+                  identifier: Olicorne.Plumed
                   installers-regex: '-setup\.exe$'
                   release-tag: ${{ inputs.tag || github.event.release.tag_name }}
                   token: ${{ secrets.WINGET_TOKEN }}
