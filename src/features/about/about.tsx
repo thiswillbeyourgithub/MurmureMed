@@ -200,7 +200,7 @@ export const About = () => {
                     />
                     <p className="text-xs text-muted-foreground">v{version || '-'}</p>
                     <p className="text-xs text-muted-foreground">
-                        {t('Powered by')} <span className="text-sky-400/70">{t('Parakeet ultra')}</span>
+                        {t('Powered by')} <span className="text-sky-400/70">{t('Parakeet UltiMed')}</span>
                         {' · '}
                         <ExternalLink
                             href="https://www.gnu.org/licenses/agpl-3.0.html"
