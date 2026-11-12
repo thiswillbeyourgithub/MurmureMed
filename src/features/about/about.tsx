@@ -5,6 +5,7 @@ import { ExternalLink } from '@/components/external-link';
 import { useGetVersion } from '../layout/hooks/use-get-version';
 import { useTranslation } from '@/i18n';
 import appIcon from '@/assets/app-icon.png';
+import { ForkCredits } from './fork-credits/fork-credits';
 
 const containerVariants = {
     hidden: { opacity: 1 },
@@ -189,6 +190,10 @@ export const About = () => {
                             );
                         })}
                     </div>
+                </motion.div>
+
+                <motion.div variants={sectionVariants} className="w-full">
+                    <ForkCredits />
                 </motion.div>
 
                 <motion.div variants={sectionVariants} className="flex flex-col items-center gap-2 pt-2">
