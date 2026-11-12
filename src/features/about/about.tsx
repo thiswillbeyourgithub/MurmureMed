@@ -46,11 +46,11 @@ const SUPPORT_LINKS = [
         ctaIcon: Star,
         ctaKey: 'Star',
         gradient: 'from-sky-500 via-cyan-500 to-blue-500',
-        glowColor: 'rgba(56, 189, 248, 0.3)',
-        hoverGlow: 'rgba(56, 189, 248, 0.15)',
+        glowColor: 'rgba(167, 139, 250, 0.3)',
+        hoverGlow: 'rgba(167, 139, 250, 0.15)',
         iconColor: 'text-sky-400',
         borderHover: 'hover:border-sky-500/50',
-        iconBg: 'rgba(56, 189, 248, 0.15)',
+        iconBg: 'rgba(167, 139, 250, 0.15)',
         wide: true,
     },
     {
@@ -110,14 +110,14 @@ export const About = () => {
                             alt="Murmure"
                             className="w-14 h-14"
                             style={{
-                                filter: 'drop-shadow(0 0 20px rgba(56, 189, 248, 0.3))',
+                                filter: 'drop-shadow(0 0 20px rgba(167, 139, 250, 0.3))',
                             }}
                             variants={logoVariants}
                         />
                         <h1
                             className="text-3xl font-bold tracking-wide"
                             style={{
-                                textShadow: '0 0 30px rgba(14, 165, 233, 0.4)',
+                                textShadow: '0 0 30px rgba(139, 92, 246, 0.4)',
                             }}
                         >
                             <span className="text-sky-400">{t('Murmure')}</span>
