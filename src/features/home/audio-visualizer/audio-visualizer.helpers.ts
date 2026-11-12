@@ -15,7 +15,7 @@ const GLOW_ALPHA = 0.25;
 type Rgb = [number, number, number];
 
 const GRADIENT_PALETTES: Record<ColorScheme, { center: Rgb; mid: Rgb; edge: Rgb }> = {
-    standard: { center: [34, 211, 238], mid: [14, 165, 233], edge: [59, 130, 246] },
+    standard: { center: [180, 139, 255], mid: [139, 92, 246], edge: [106, 53, 208] },
     llm: { center: [221, 60, 221], mid: [128, 77, 230], edge: [171, 48, 232] },
     command: { center: [249, 200, 6], mid: [249, 148, 6], edge: [233, 86, 12] },
 };

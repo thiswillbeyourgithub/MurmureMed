@@ -53,13 +53,13 @@ Branches are created only with the user's approval. **Never open a pull request 
 
 | Feature | Branch | Depends on | Status | Upstream PR |
 | --- | --- | --- | --- | --- |
-| UltiMed fine-tune as default model | `feat/ultimed-model` | | planned | |
+| UltiMed fine-tune as default model (CI fetches the int8 export from Hugging Face, pinned and hash-checked, by `scripts/fetch-ultimed-model.sh`) | `feat/ultimed-model` | | merged (boosting keeps helping with UltiMed: drug term recall 56 to 78 of 107, same tuning) | not planned (fork only) |
 | Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | not needed for now (the medical rules' only lookbehind, the title exclusions, is handled in code; InterHop rules have none) | |
 | Compile regex once, not on every transcription | `feat/regex-compile-once` | | merged (11x to 15x faster rule application) | not planned (upstream is fine with compiling per transcription for its short lists, see #498) |
 | Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
-| ParakeetWeb phrase boosting engine (hybrid: upstream boost for the user dictionary, ParakeetWeb trie for phrase lists, larger bonus wins where they overlap) | `feat/phrase-boosting` (from `medmain`) | | done, not merged (engine only, app hookup comes with the list) | |
-| French medical phrase boosting list (bundled from ParakeetWeb, armed at model load, ~2 s trie build on the startup thread) | `feat/medical-phrase-list` | `feat/phrase-boosting` | done, not merged (app not launched yet; merge with `feat/phrase-boosting`) | |
-| Branding (name, icon, explicit fork credit), toggles for extra regex and phrase boosting | `feat/branding` | | planned | |
+| ParakeetWeb phrase boosting engine (hybrid: upstream boost for the user dictionary, ParakeetWeb trie for phrase lists, larger bonus wins where they overlap) | `feat/phrase-boosting` (from `medmain`) | | merged | |
+| French medical phrase boosting list (bundled from ParakeetWeb, armed at model load, ~2 s trie build on the startup thread) | `feat/medical-phrase-list` | `feat/phrase-boosting` | merged | |
+| Branding (name, purple theme, fork credits, local-only notice, own identifier, updater and winget; icon and toggles for extra regex and phrase boosting still to do) | `feat/branding` (from `medmain`) | | merged, in progress | |
 | Remote microphone through an internet relay (or iroh) | `feat/remote-mic-relay` | | idea | |
 
 Update this table when a branch is created, merged, or proposed upstream.
@@ -78,7 +78,21 @@ The version must be identical in `package.json`, `src-tauri/Cargo.toml` (and `Ca
 
 Caveat: Windows Installer ignores the fourth number when deciding whether an MSI is an upgrade, so `2.0.3.17` to `2.0.3.18` would not upgrade cleanly through the `.msi`. Ship the NSIS `-setup.exe` as the main Windows installer (it is also the one that installs without admin rights).
 
-## 6. Other
+## 6. Releases
+
+Identity: the app identifier is `org.olicorne.murmuremed` (own settings and history folder, separate from an installed Murmure). The product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too.
+
+Auto-updater (`plugins.updater` in `src-tauri/tauri.conf.json`): the app downloads `latest.json` from our latest GitHub release and only installs an update whose signature matches the `pubkey` in that file. One-time setup:
+
+1. `pnpm tauri signer generate -w ~/.tauri/murmuremed.key` (asks for a password). It writes the private key `murmuremed.key` and the public key `murmuremed.key.pub`. Keep the private key out of the repo and back it up: if it is lost, installed copies can never be updated again.
+2. Paste the content of `murmuremed.key.pub` as `pubkey`.
+3. In the GitHub repo settings (Secrets and variables > Actions), add `TAURI_PRIVATE_KEY` (content of `murmuremed.key`) and `TAURI_KEY_PASSWORD`. The build workflows use them to sign the bundles (`.sig` files next to each installer).
+
+Each release: run the `Release Murmure` workflow, create a GitHub release from its artifacts, and upload a `latest.json` listing, per platform, the installer URL and the content of its `.sig` (format: https://v2.tauri.app/plugin/updater/#static-json-file). Upstream writes it by hand; the workflows do not generate it.
+
+WinGet (`.github/workflows/publish-winget.yml`, id `Olicorne.MurmureMed`, NSIS `-setup.exe` only): it runs on every published release, but it can only update a package that already exists in microsoft/winget-pkgs. The first version must be submitted once by hand (for example with `komac new` or `wingetcreate new`), then add a `WINGET_TOKEN` secret (a GitHub token allowed to open PRs on winget-pkgs).
+
+## 7. Other
 
 - Personal notes and reminders live in `TODO.local.md` (gitignored).
 - Machine-specific notes (which OSes the maintainer can test on) live in `AGENTS.local.md` (gitignored): read it if present.

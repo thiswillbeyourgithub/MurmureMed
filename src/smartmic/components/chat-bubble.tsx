@@ -12,7 +12,7 @@ export const ChatBubble = ({ entry, onLeft }: ChatBubbleProps) => {
     const detectedLabel = entry.detectedLang === null ? '??' : entry.detectedLang.toUpperCase();
     const targetLabel = entry.targetLang.toUpperCase();
     const hasTranslation = entry.translatedText.length > 0;
-    const bubbleBg = onLeft ? 'bg-[#1a2e3a]' : 'bg-[#2e1a1a]';
+    const bubbleBg = onLeft ? 'bg-[#261a3a]' : 'bg-[#2e1a1a]';
     const sideAlign = onLeft ? 'text-left' : 'text-right';
 
     return (

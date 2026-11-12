@@ -1,0 +1,49 @@
+/* MurmureMed theme (fork only, written with Claude Code): ParakeetWeb's purple
+   (#8b5cf6, Tailwind violet-500) instead of Murmure's blue. The blue palettes
+   used across upstream components are redefined here, so no component file
+   needs editing and upstream merges stay conflict free. */
+
+@theme {
+    /* sky -> violet */
+    --color-sky-50: oklch(96.9% 0.016 293.756);
+    --color-sky-100: oklch(94.3% 0.029 294.588);
+    --color-sky-200: oklch(89.4% 0.057 293.283);
+    --color-sky-300: oklch(81.1% 0.111 293.571);
+    --color-sky-400: oklch(70.2% 0.183 293.541);
+    --color-sky-500: oklch(60.6% 0.25 292.717);
+    --color-sky-600: oklch(54.1% 0.281 293.009);
+    --color-sky-700: oklch(49.1% 0.27 292.581);
+    --color-sky-800: oklch(43.2% 0.232 292.759);
+    --color-sky-900: oklch(38% 0.189 293.745);
+    --color-sky-950: oklch(28.3% 0.141 291.089);
+    /* blue -> violet */
+    --color-blue-50: oklch(96.9% 0.016 293.756);
+    --color-blue-100: oklch(94.3% 0.029 294.588);
+    --color-blue-200: oklch(89.4% 0.057 293.283);
+    --color-blue-300: oklch(81.1% 0.111 293.571);
+    --color-blue-400: oklch(70.2% 0.183 293.541);
+    --color-blue-500: oklch(60.6% 0.25 292.717);
+    --color-blue-600: oklch(54.1% 0.281 293.009);
+    --color-blue-700: oklch(49.1% 0.27 292.581);
+    --color-blue-800: oklch(43.2% 0.232 292.759);
+    --color-blue-900: oklch(38% 0.189 293.745);
+    --color-blue-950: oklch(28.3% 0.141 291.089);
+    /* cyan -> purple */
+    --color-cyan-50: oklch(97.7% 0.014 308.299);
+    --color-cyan-100: oklch(94.6% 0.033 307.174);
+    --color-cyan-200: oklch(90.2% 0.063 306.703);
+    --color-cyan-300: oklch(82.7% 0.119 306.383);
+    --color-cyan-400: oklch(71.4% 0.203 305.504);
+    --color-cyan-500: oklch(62.7% 0.265 303.9);
+    --color-cyan-600: oklch(55.8% 0.288 302.321);
+    --color-cyan-700: oklch(49.6% 0.265 301.924);
+    --color-cyan-800: oklch(43.8% 0.218 303.724);
+    --color-cyan-900: oklch(38.1% 0.176 304.987);
+    --color-cyan-950: oklch(29.1% 0.149 302.717);
+}
+
+/* Upstream's one non-neutral theme color (blue, hue 264); doubled class so it
+   wins over tailwind.css regardless of order. */
+.dark.dark {
+    --sidebar-primary: oklch(54.1% 0.281 293.009);
+}

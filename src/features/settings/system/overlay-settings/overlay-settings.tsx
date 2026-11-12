@@ -70,7 +70,7 @@ export const OverlaySettings = () => {
                                         overflow: 'hidden',
                                     }}
                                 >
-                                    So basically Murmure does real-time{' '}
+                                    So basically MurmureMed does real-time{' '}
                                     <span className="text-cyan-400">transcription</span> as you speak, and it runs
                                     entirely on your machine so nothing leaves your device. It handles multiple
                                     languages, applies automatic <span className="text-cyan-400">punctuation</span> and

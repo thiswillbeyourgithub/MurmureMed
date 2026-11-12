@@ -38,7 +38,7 @@ fn print_help() {
     println!(
         "\
 murmure {}
-Murmure - Privacy-first speech-to-text
+MurmureMed - Privacy-first speech-to-text (French medical fork of Murmure)
 
 USAGE:
     murmure [OPTIONS]

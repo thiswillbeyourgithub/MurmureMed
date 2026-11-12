@@ -106,7 +106,7 @@ export const TranslationMode = ({
                         ))}
                         {isTranslating && (
                             <div className="flex justify-start mb-2 animate-in fade-in-0 duration-200">
-                                <div className="rounded-2xl px-3 py-2 bg-[#1a2e3a] text-[#e5e5e5] flex items-center gap-2">
+                                <div className="rounded-2xl px-3 py-2 bg-[#261a3a] text-[#e5e5e5] flex items-center gap-2">
                                     <span className="text-sm">{t('translation.translating')}</span>
                                     <span className="animate-pulse text-sm">...</span>
                                 </div>
