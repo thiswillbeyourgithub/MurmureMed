@@ -1,4 +1,4 @@
-//! French medical post-processing (MurmureMed fork only, not for upstream).
+//! French medical post-processing (Plumed fork only, not for upstream).
 //!
 //! The bundled drug and medical-term fix rules, plus the user's edits to them,
 //! kept apart from the user's own formatting rules: those run after, and an

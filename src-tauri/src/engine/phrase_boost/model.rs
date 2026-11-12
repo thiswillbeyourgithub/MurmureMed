@@ -40,13 +40,13 @@ mod tests {
     use std::path::Path;
 
     /// Decoding benchmark harness: transcribes every 16 kHz mono wav listed
-    /// (one path per line) in MURMUREMED_BENCH_WAVS and prints one
+    /// (one path per line) in PLUMED_BENCH_WAVS and prints one
     /// `HYP<TAB>path<TAB>text` line each. Optional boosting, combinable:
-    /// MURMUREMED_BOOST_WORDS_FILE (dictionary words, one per line) and
-    /// MURMUREMED_BOOST_LIST (a ParakeetWeb phrase list). Clips are padded
+    /// PLUMED_BOOST_WORDS_FILE (dictionary words, one per line) and
+    /// PLUMED_BOOST_LIST (a ParakeetWeb phrase list). Clips are padded
     /// with silence like the app does: unpadded, the model drifts into
     /// English (WER 50% instead of 18% on French medical clips).
-    /// `MURMUREMED_MODEL_DIR=... MURMUREMED_BENCH_WAVS=... cargo test --release
+    /// `PLUMED_MODEL_DIR=... PLUMED_BENCH_WAVS=... cargo test --release
     /// --lib phrase_boost::model::tests::bench_transcribe -- --ignored --nocapture`
     #[test]
     #[ignore]
@@ -54,17 +54,17 @@ mod tests {
         let env = |k: &str| std::env::var(k).ok();
         let read = |path: String| std::fs::read_to_string(path).expect("readable file");
         let tokenizer = Path::new(env!("CARGO_MANIFEST_DIR")).join("../resources/tokenizer.json");
-        let model_dir = env("MURMUREMED_MODEL_DIR").expect("MURMUREMED_MODEL_DIR");
+        let model_dir = env("PLUMED_MODEL_DIR").expect("PLUMED_MODEL_DIR");
         let mut engine =
             ParakeetEngine::load_int8(Path::new(&model_dir), Some(tokenizer)).expect("model");
-        if let Some(path) = env("MURMUREMED_BOOST_WORDS_FILE") {
+        if let Some(path) = env("PLUMED_BOOST_WORDS_FILE") {
             let words: Vec<String> = read(path).lines().map(str::to_string).collect();
             engine.set_boost_words(&words);
         }
-        if let Some(path) = env("MURMUREMED_BOOST_LIST") {
+        if let Some(path) = env("PLUMED_BOOST_LIST") {
             engine.set_boost_list(&read(path));
         }
-        let wavs = read(env("MURMUREMED_BENCH_WAVS").expect("MURMUREMED_BENCH_WAVS"));
+        let wavs = read(env("PLUMED_BENCH_WAVS").expect("PLUMED_BENCH_WAVS"));
         let start = std::time::Instant::now();
         for wav in wavs.lines() {
             let samples: Vec<f32> = hound::WavReader::open(wav)

@@ -45,7 +45,7 @@ fn apply_short_text_correction(text: String) -> String {
 pub fn apply_formatting(text: String, settings: &FormattingSettings) -> String {
     let mut result = text;
 
-    // MurmureMed: fix drug names and medical terms first, on the raw model output
+    // Plumed: fix drug names and medical terms first, on the raw model output
     if settings.built_in.medical_fixes {
         result = crate::medical::apply_medical_fixes(result);
     }

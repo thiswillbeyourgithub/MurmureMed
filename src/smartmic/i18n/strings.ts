@@ -22,7 +22,7 @@ export const STRINGS = {
         'transcription.clearConfirm': 'Clear all transcriptions?',
 
         'translation.empty': 'Tap REC to start a bilingual conversation',
-        'translation.requirement': 'Requires Prompt Mode on MurmureMed desktop',
+        'translation.requirement': 'Requires Prompt Mode on Plumed desktop',
         'translation.languages': 'Languages:',
         'translation.translating': 'Translating...',
         'translation.unavailable': 'Prompt Mode not configured on desktop',
@@ -69,7 +69,7 @@ export const STRINGS = {
         'transcription.clearConfirm': 'Effacer toutes les transcriptions ?',
 
         'translation.empty': 'Appuyez sur REC pour demarrer une conversation bilingue',
-        'translation.requirement': 'Necessite le mode prompt sur MurmureMed desktop',
+        'translation.requirement': 'Necessite le mode prompt sur Plumed desktop',
         'translation.languages': 'Langues :',
         'translation.translating': 'Traduction...',
         'translation.unavailable': 'Mode Prompt non configure sur le bureau',

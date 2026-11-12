@@ -311,7 +311,7 @@ pub fn run() {
             app.manage(SmartMicState::new());
             app.manage(utils::enigo_session::EnigoState::default());
 
-            // MurmureMed: parse the medical rules now, not on the first transcription
+            // Plumed: parse the medical rules now, not on the first transcription
             let medical_handle = app.handle().clone();
             std::thread::spawn(move || crate::medical::init(&medical_handle));
 

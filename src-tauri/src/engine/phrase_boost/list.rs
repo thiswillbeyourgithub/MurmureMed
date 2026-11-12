@@ -8,7 +8,7 @@
 //! default (`a::0.2`). A `*:WEIGHT:MINP:AUG` line sets the defaults of the
 //! lines below it. `#!prefixes l' d'` sets the elision prefixes of the `p`
 //! augmentation; `#!commitment 0` sets how much the first tokens of a phrase
-//! are held back (MurmureMed extension, see `trie`; ParakeetWeb reads it as a
+//! are held back (Plumed extension, see `trie`; ParakeetWeb reads it as a
 //! comment); any other `#!` line is a comment.
 //!
 //! AUG flags: `f` Title Case, `a` ALL CAPS, `p` elision prefixes, `h` symbols

@@ -186,11 +186,11 @@ mod tests {
     }
 
     /// Size and build time of a real list:
-    /// `MURMUREMED_BOOST_LIST=path/to/list.txt cargo test --release --lib phrase_boost -- --ignored --nocapture`
+    /// `PLUMED_BOOST_LIST=path/to/list.txt cargo test --release --lib phrase_boost -- --ignored --nocapture`
     #[test]
     #[ignore]
     fn build_stats_of_a_real_list() {
-        let path = std::env::var("MURMUREMED_BOOST_LIST").expect("MURMUREMED_BOOST_LIST");
+        let path = std::env::var("PLUMED_BOOST_LIST").expect("PLUMED_BOOST_LIST");
         let tokenizer = bundled_tokenizer().expect("tokenizer");
         let raw = std::fs::read_to_string(path).expect("list");
         let start = std::time::Instant::now();
