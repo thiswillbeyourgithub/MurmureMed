@@ -12,8 +12,8 @@ Why a fork and not upstream PRs: see [Kieirra/murmure#498](https://github.com/Ki
 
 ## 2. Mandatory at the start of every session: check upstream
 
-**Last checked upstream commit:** `4973812` (docs: update roadmap)
-**Date of check:** 2026-11-11
+**Last checked upstream commit:** `8ad2363` (docs: update roadmap)
+**Date of check:** 2026-11-12
 
 At the start of every new session, before other work:
 
