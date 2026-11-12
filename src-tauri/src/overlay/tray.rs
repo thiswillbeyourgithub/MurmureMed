@@ -61,7 +61,7 @@ fn handle_tray_icon_event(tray: &TrayIcon, event: TrayIconEvent) {
 }
 
 pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
-    let show_i = MenuItem::with_id(app, "show", "Open Murmure", true, None::<&str>)?;
+    let show_i = MenuItem::with_id(app, "show", "Open MurmureMed", true, None::<&str>)?;
     let copy_last_i = MenuItem::with_id(
         app,
         "copy_last_transcript",
@@ -102,7 +102,7 @@ pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let builder = TrayIconBuilder::new()
-        .tooltip("Murmure")
+        .tooltip("MurmureMed")
         .menu(&menu)
         .on_menu_event(|app, event| match event.id.as_ref() {
             "show" => restore_main_window(app),

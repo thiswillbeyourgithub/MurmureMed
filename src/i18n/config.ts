@@ -3,8 +3,10 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import fr from './locales/fr.json';
+import { murmureMedName } from './murmuremed-name';
 
 i18n.use(LanguageDetector)
+    .use(murmureMedName)
     .use(initReactI18next)
     .init({
         resources: {
@@ -12,6 +14,7 @@ i18n.use(LanguageDetector)
         },
         ns: ['translation'],
         defaultNS: 'translation',
+        postProcess: ['murmuremed-name'],
         keySeparator: false,
         nsSeparator: false,
         fallbackLng: false,
