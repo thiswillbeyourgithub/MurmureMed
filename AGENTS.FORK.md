@@ -76,7 +76,21 @@ The version must be identical in `package.json`, `src-tauri/Cargo.toml` (and `Ca
 
 Caveat: Windows Installer ignores the fourth number when deciding whether an MSI is an upgrade, so `2.0.3.17` to `2.0.3.18` would not upgrade cleanly through the `.msi`. Ship the NSIS `-setup.exe` as the main Windows installer (it is also the one that installs without admin rights).
 
-## 6. Other
+## 6. Releases
+
+Identity: the app identifier is `org.olicorne.murmuremed` (own settings and history folder, separate from an installed Murmure). The product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too.
+
+Auto-updater (`plugins.updater` in `src-tauri/tauri.conf.json`): the app downloads `latest.json` from our latest GitHub release and only installs an update whose signature matches the `pubkey` in that file. One-time setup:
+
+1. `pnpm tauri signer generate -w ~/.tauri/murmuremed.key` (asks for a password). It writes the private key `murmuremed.key` and the public key `murmuremed.key.pub`. Keep the private key out of the repo and back it up: if it is lost, installed copies can never be updated again.
+2. Paste the content of `murmuremed.key.pub` as `pubkey`.
+3. In the GitHub repo settings (Secrets and variables > Actions), add `TAURI_PRIVATE_KEY` (content of `murmuremed.key`) and `TAURI_KEY_PASSWORD`. The build workflows use them to sign the bundles (`.sig` files next to each installer).
+
+Each release: run the `Release Murmure` workflow, create a GitHub release from its artifacts, and upload a `latest.json` listing, per platform, the installer URL and the content of its `.sig` (format: https://v2.tauri.app/plugin/updater/#static-json-file). Upstream writes it by hand; the workflows do not generate it.
+
+WinGet (`.github/workflows/publish-winget.yml`, id `Olicorne.MurmureMed`, NSIS `-setup.exe` only): it runs on every published release, but it can only update a package that already exists in microsoft/winget-pkgs. The first version must be submitted once by hand (for example with `komac new` or `wingetcreate new`), then add a `WINGET_TOKEN` secret (a GitHub token allowed to open PRs on winget-pkgs).
+
+## 7. Other
 
 - Personal notes and reminders live in `TODO.local.md` (gitignored).
 - Machine-specific notes (which OSes the maintainer can test on) live in `AGENTS.local.md` (gitignored): read it if present.
