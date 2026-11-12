@@ -47,7 +47,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 - `git rerere` is enabled locally (`git config rerere.enabled true`) so a conflict resolved once is resolved automatically next time.
 - Recurring conflicts and how to resolve them:
     - `README.md`: always keep ours.
-    - Version fields (see section 5): take the new upstream version and reapply our suffix.
+    - Version fields (see section 5): always keep ours.
 
 ### Feature tracking
 
@@ -70,25 +70,25 @@ Note for `feat/phrase-boosting`: benchmarked on 200 UltiMed validation clips (Pa
 
 ## 5. Versioning
 
-Format: `<upstream version>-med.<n>`, for example `2.0.3-med.17`. `<n>` is our own counter and resets to 1 when the upstream base changes (`2.0.4-med.1`).
+Plumed has its own version number, independent from upstream's, starting at `0.1.0` (plain semver: Cargo, `package.json` and Tauri all require exactly three numbers). The auto-updater compares it with the `version` in `latest.json`, so every release must bump it. Upstream's version is not tracked in ours: the last merged upstream commit is recorded in section 2.
 
-Why not `2.0.3.17`: Cargo, `package.json` and Tauri all require semver (exactly three numbers), so a fourth number fails to parse. A semver pre-release suffix is accepted everywhere and compares correctly (`med.9` < `med.17`, numerically). The `+med.17` build metadata form is not used because semver ignores it when comparing, so the auto-updater would never see a new version.
+The version must be identical in `package.json`, `src-tauri/Cargo.toml` (and `Cargo.lock`) and `src-tauri/tauri.conf.json`. When an upstream merge conflicts on these lines, keep ours.
 
-The version must be identical in `package.json`, `src-tauri/Cargo.toml` (and `Cargo.lock`) and `src-tauri/tauri.conf.json`. In `tauri.conf.json` also set `bundle.windows.wix.version` to the four-number form (`2.0.3.17`), since MSI does not accept text pre-release suffixes.
-
-Caveat: Windows Installer ignores the fourth number when deciding whether an MSI is an upgrade, so `2.0.3.17` to `2.0.3.18` would not upgrade cleanly through the `.msi`. Ship the NSIS `-setup.exe` as the main Windows installer (it is also the one that installs without admin rights).
+Ship the NSIS `-setup.exe` as the main Windows installer: it installs without admin rights, and `latest.json` points Windows updates to it.
 
 ## 6. Releases
 
-Identity: the app identifier is `org.olicorne.plumed` (own settings and history folder, separate from an installed Murmure; the remote LLM API key also has its own keyring entry, `plumed`). The window title, tray and UI say Plumed, but the product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too. Renaming them means setting `productName` (and `mainBinaryName`) and then updating every path derived from it: the onnxruntime path `/usr/lib/murmure/` in `build-linux.yml`, the pacman marker in `platform.rs` and the AUR `PKGBUILD`, the `.desktop` migration in `postinst`, `prerm` and the `PKGBUILD`, the `Murmure_*` artifact names in the workflows. Check it with a local `.deb` build before releasing.
+Identity: the app identifier is `org.olicorne.plumed` (own settings and history folder, separate from an installed Murmure; the remote LLM API key also has its own keyring entry, `plumed`). The product name is `Plumed` and the binary `plumed` (`mainBinaryName`), so Plumed installs next to Murmure: Linux package `plumed`, `/usr/bin/plumed`, resources, ONNX Runtime and the pacman marker in `/usr/lib/Plumed/` (the binary's rpath, set in `build-linux.yml`, points there), udev rule `60-plumed-uinput.rules`, release files `Plumed_*`. Upstream's crate names (`murmure`, `murmure_lib`) and the `.murmure` config import format are kept.
 
 Auto-updater (`plugins.updater` in `src-tauri/tauri.conf.json`): the app downloads `latest.json` from our latest GitHub release and only installs an update whose signature matches the `pubkey` in that file. One-time setup:
 
 1. `pnpm tauri signer generate -w ~/.tauri/murmuremed.key` (asks for a password). It writes the private key `murmuremed.key` and the public key `murmuremed.key.pub`. Keep the private key out of the repo and back it up: if it is lost, installed copies can never be updated again.
 2. Paste the content of `murmuremed.key.pub` as `pubkey`.
-3. In the GitHub repo settings (Secrets and variables > Actions), add `TAURI_PRIVATE_KEY` (content of `murmuremed.key`) and `TAURI_KEY_PASSWORD`. The build workflows use them to sign the bundles (`.sig` files next to each installer).
+3. In the GitHub repo settings (Secrets and variables > Actions), add `TAURI_PRIVATE_KEY` (the output of `base64 -w0 ~/.tauri/murmuremed.key`: the workflows decode it with `base64 -d` before signing, so the raw file content does not work) and `TAURI_KEY_PASSWORD`. The build workflows use them to sign the bundles (`.sig` files next to each installer).
 
-Each release: run the `Release Murmure` workflow, create a GitHub release from its artifacts, and upload a `latest.json` listing, per platform, the installer URL and the content of its `.sig` (format: https://v2.tauri.app/plugin/updater/#static-json-file). Upstream writes it by hand; the workflows do not generate it.
+Each release: bump the version (section 5), run the `Release Plumed` workflow, create a GitHub release tagged with the version (for example `0.1.0`) from its artifacts, then run `python scripts/make-latest-json.py <artifacts folder> --notes "..."` and upload the `latest.json` it writes. That file lists, per platform, the installer URL and the content of its `.sig` (format: https://v2.tauri.app/plugin/updater/#static-json-file); the workflows do not generate it.
+
+Code signing: there will never be an Apple developer account, so macOS builds are unsigned and not notarized (users must allow the app in System Settings > Privacy & Security, or run `xattr -dr com.apple.quarantine /Applications/Plumed.app`); the macOS workflows run their Apple certificate, DMG signing and notarization steps only when the `MACOS_CODESIGN_P12_B64` secret exists, and otherwise ad-hoc sign the `.app` (`APPLE_SIGNING_IDENTITY=-`), which Apple Silicon requires to run it at all. Windows: the SignPath step runs only when `SIGNPATH_API_TOKEN` exists; otherwise the installers are released unsigned (SmartScreen warning). Either way the Tauri updater signature (`.sig`) is always made.
 
 WinGet (`.github/workflows/publish-winget.yml`, id `Olicorne.Plumed`, NSIS `-setup.exe` only): it runs on every published release, but it can only update a package that already exists in microsoft/winget-pkgs. The first version must be submitted once by hand (for example with `komac new` or `wingetcreate new`), then add a `WINGET_TOKEN` secret (a GitHub token allowed to open PRs on winget-pkgs).
 
