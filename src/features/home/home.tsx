@@ -8,6 +8,7 @@ import { useIsWayland } from '@/components/hooks/use-linux-session-type';
 import { RecordLabel } from '@/components/record-label';
 import { MicLabel } from './mic-label/mic-label';
 import { MicDisconnectedBanner } from './mic-disconnected-banner/mic-disconnected-banner';
+import { PrivacyNotice } from './privacy-notice/privacy-notice';
 
 export const Home = () => {
     const isWayland = useIsWayland();
@@ -27,6 +28,7 @@ export const Home = () => {
                         <MicLabel />
                         <RecordLabel />
                     </div>
+                    <PrivacyNotice />
                 </div>
 
                 {isWayland && <WaylandClipboardFallbackCard />}
