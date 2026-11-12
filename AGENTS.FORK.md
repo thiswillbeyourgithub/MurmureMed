@@ -53,7 +53,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 
 | Feature | Branch | Depends on | Status | Upstream PR |
 | --- | --- | --- | --- | --- |
-| UltiMed fine-tune as default model | `feat/ultimed-model` | | planned | |
+| UltiMed fine-tune as default model (CI fetches the int8 export from Hugging Face, pinned and hash-checked, by `scripts/fetch-ultimed-model.sh`) | `feat/ultimed-model` | | done, not merged (boosting keeps helping with UltiMed: drug term recall 56 to 78 of 107, same tuning) | not planned (fork only) |
 | Regex engine supporting lookarounds (fancy-regex or similar) | `feat/regex-engine` | | not needed for now (the medical rules' only lookbehind, the title exclusions, is handled in code; InterHop rules have none) | |
 | Compile regex once, not on every transcription | `feat/regex-compile-once` | | merged (11x to 15x faster rule application) | not planned (upstream is fine with compiling per transcription for its short lists, see #498) |
 | Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
