@@ -59,7 +59,7 @@ Branches are created only with the user's approval. **Never open a pull request 
 | Medical regex list (UltiMed drug and term fixes, editable in an advanced panel, separate from user rules) plus InterHop dictation rules seeded as default user rules | `feat/medical-regex` | | merged | not planned (fork only, see #498) |
 | ParakeetWeb phrase boosting engine | `feat/phrase-boosting` | | planned | |
 | French medical phrase boosting list | `feat/medical-phrase-list` | `feat/phrase-boosting` | planned | |
-| Branding (name, icon, explicit fork credit), toggles for extra regex and phrase boosting | `feat/branding` | | planned | |
+| Branding (name, purple theme, fork credits, local-only notice; icon and toggles for extra regex and phrase boosting still to do) | `feat/branding` (from `medmain`) | | in progress | |
 | Remote microphone through an internet relay (or iroh) | `feat/remote-mic-relay` | | idea | |
 
 Update this table when a branch is created, merged, or proposed upstream.
