@@ -27,7 +27,7 @@ pub fn try_handle_early_args() -> bool {
     }
 
     if has_version {
-        println!("murmure {}", VERSION);
+        println!("plumed {}", VERSION);
         return true;
     }
 
@@ -37,13 +37,13 @@ pub fn try_handle_early_args() -> bool {
 fn print_help() {
     println!(
         "\
-murmure {}
+plumed {}
 Plumed - Privacy-first speech-to-text (French medical fork of Murmure)
 
 USAGE:
-    murmure [OPTIONS]
-    murmure import <FILE> [IMPORT_OPTIONS]
-    murmure transcribe <FILE>
+    plumed [OPTIONS]
+    plumed import <FILE> [IMPORT_OPTIONS]
+    plumed transcribe <FILE>
 
 OPTIONS:
     --transcription              Toggle standard transcription on/off
@@ -62,7 +62,7 @@ IMPORT:
     Import a .murmure configuration file.
 
     USAGE:
-        murmure import <FILE> [OPTIONS]
+        plumed import <FILE> [OPTIONS]
 
     ARGS:
         <FILE>    Path to the .murmure file to import
@@ -74,7 +74,7 @@ TRANSCRIBE:
     Transcribe an audio file and print the text to stdout, then exit.
 
     USAGE:
-        murmure transcribe <FILE> [TRANSCRIBE_OPTIONS]
+        plumed transcribe <FILE> [TRANSCRIBE_OPTIONS]
 
     ARGS:
         <FILE>    Path to the WAV file to transcribe
@@ -85,15 +85,15 @@ TRANSCRIBE:
         --dictionary-file <F>    Load the dictionary from a file (one word per line)
 
 EXAMPLES:
-    murmure --transcription
-    murmure --paste-last
-    murmure --llm-mode 2
-    murmure --transcription --hidden
-    murmure import config.murmure
-    murmure import config.murmure --strategy merge
-    murmure import config.murmure -s replace
-    murmure transcribe recording.wav
-    murmure transcribe recording.wav -v",
+    plumed --transcription
+    plumed --paste-last
+    plumed --llm-mode 2
+    plumed --transcription --hidden
+    plumed import config.murmure
+    plumed import config.murmure --strategy merge
+    plumed import config.murmure -s replace
+    plumed transcribe recording.wav
+    plumed transcribe recording.wav -v",
         VERSION
     );
 }
@@ -132,7 +132,7 @@ pub fn parse_raw_args(args: &[String]) -> Result<Option<CliCommand>, String> {
             })),
             None => Err(
                 "transcribe requires a <FILE> argument (path to a WAV file). \
-                 Usage: murmure transcribe <FILE>"
+                 Usage: plumed transcribe <FILE>"
                     .to_string(),
             ),
         };

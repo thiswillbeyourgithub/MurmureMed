@@ -32,6 +32,11 @@ jobs:
     build-macos:
         runs-on: macos-latest
         timeout-minutes: 200
+        # Plumed: no Apple Developer account, so the Apple certificate,
+        # DMG signing and notarization steps only run when the secret exists;
+        # otherwise the .app is ad-hoc signed (needed to run on Apple Silicon).
+        env:
+            HAS_APPLE_CERT: ${{ secrets.MACOS_CODESIGN_P12_B64 != '' }}
         steps:
             - uses: actions/checkout@v4
 
@@ -60,7 +65,7 @@ jobs:
 
             # ── Official Apple code signing ──────────────────────────────
             - name: Import Apple Developer ID certificate
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT == 'true' }}
               shell: bash
               env:
                   MACOS_CODESIGN_P12_B64: ${{ secrets.MACOS_CODESIGN_P12_B64 }}
@@ -97,6 +102,11 @@ jobs:
                   echo "KEYCHAIN_PATH=${KEYCHAIN_PATH}" >> "$GITHUB_ENV"
                   echo "APPLE_SIGNING_IDENTITY=${MACOS_CODESIGN_IDENTITY}" >> "$GITHUB_ENV"
 
+            - name: Use ad-hoc signing (no Apple certificate)
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT != 'true' }}
+              shell: bash
+              run: echo "APPLE_SIGNING_IDENTITY=-" >> "$GITHUB_ENV"
+
             - name: Install frontend deps
               run: pnpm install --ignore-scripts
 
@@ -110,7 +120,7 @@ jobs:
               run: pnpm tauri build ${{ inputs.dry && '--no-bundle' || '--bundles dmg,app' }}
 
             - name: Sign DMG
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT == 'true' }}
               shell: bash
               run: |
                   set -euo pipefail
@@ -132,7 +142,7 @@ jobs:
 
             # ── Notarization ─────────────────────────────────────────────
             - name: Notarize DMG with Apple
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT == 'true' }}
               shell: bash
               env:
                   APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -209,14 +219,14 @@ jobs:
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_aarch64_darwin.dmg"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_aarch64_darwin.dmg"' _ {} \;
 
             - name: Rename .app.tar.gz files
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_aarch64_darwin.app.tar.gz"' _ {} \;
-                  find src-tauri/target/release/bundle -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_aarch64_darwin.app.tar.gz.sig"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_aarch64_darwin.app.tar.gz"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_aarch64_darwin.app.tar.gz.sig"' _ {} \;
 
             # ── Cleanup ──────────────────────────────────────────────────
             - name: Cleanup keychain
@@ -232,7 +242,7 @@ jobs:
               if: ${{ inputs.dry == false }}
               uses: actions/upload-artifact@v4
               with:
-                  name: murmure-macos
+                  name: plumed-macos
                   path: |
                       src-tauri/target/release/bundle/**/*.dmg
                       src-tauri/target/release/bundle/**/*.app.tar.gz

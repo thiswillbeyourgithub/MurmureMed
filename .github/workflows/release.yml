@@ -1,4 +1,4 @@
-name: Release Murmure
+name: Release Plumed
 on:
     workflow_dispatch:
         inputs:

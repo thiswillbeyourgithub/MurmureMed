@@ -39,6 +39,11 @@ jobs:
     build-macos-intel:
         runs-on: macos-latest
         timeout-minutes: 200
+        # Plumed: no Apple Developer account, so the Apple certificate,
+        # DMG signing and notarization steps only run when the secret exists;
+        # otherwise the .app is ad-hoc signed (needed to run on Apple Silicon).
+        env:
+            HAS_APPLE_CERT: ${{ secrets.MACOS_CODESIGN_P12_B64 != '' }}
         steps:
             - uses: actions/checkout@v4
 
@@ -162,7 +167,7 @@ jobs:
 
             # ── Official Apple code signing ──────────────────────────────
             - name: Import Apple Developer ID certificate
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT == 'true' }}
               shell: bash
               env:
                   MACOS_CODESIGN_P12_B64: ${{ secrets.MACOS_CODESIGN_P12_B64 }}
@@ -199,6 +204,11 @@ jobs:
                   echo "KEYCHAIN_PATH=${KEYCHAIN_PATH}" >> "$GITHUB_ENV"
                   echo "APPLE_SIGNING_IDENTITY=${MACOS_CODESIGN_IDENTITY}" >> "$GITHUB_ENV"
 
+            - name: Use ad-hoc signing (no Apple certificate)
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT != 'true' }}
+              shell: bash
+              run: echo "APPLE_SIGNING_IDENTITY=-" >> "$GITHUB_ENV"
+
             - name: Install frontend deps
               run: arch -x86_64 pnpm install --ignore-scripts
 
@@ -227,7 +237,7 @@ jobs:
                     echo "::error::No .app bundle found in src-tauri/target/x86_64-apple-darwin/release/bundle/macos"
                     exit 1
                   fi
-                  bin="$app/Contents/MacOS/murmure"
+                  bin="$app/Contents/MacOS/plumed"
                   file "$bin"
                   file "$app/Contents/Frameworks/libonnxruntime.1.23.2.dylib"
 
@@ -262,7 +272,7 @@ jobs:
                   echo "::notice::Transcription OK: $(cat "$RUNNER_TEMP/smoke.out")"
 
             - name: Sign DMG
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT == 'true' }}
               shell: bash
               run: |
                   set -euo pipefail
@@ -284,7 +294,7 @@ jobs:
 
             # ── Notarization ─────────────────────────────────────────────
             - name: Notarize DMG with Apple
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_APPLE_CERT == 'true' }}
               shell: bash
               env:
                   APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -365,7 +375,7 @@ jobs:
               run: |
                   set -euo pipefail
                   bundle_dir="src-tauri/target/x86_64-apple-darwin/release/bundle"
-                  find "$bundle_dir" -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_x86_64_darwin.dmg"' _ {} \;
+                  find "$bundle_dir" -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_x86_64_darwin.dmg"' _ {} \;
 
             - name: Rename .app.tar.gz files to Intel suffix
               if: ${{ inputs.dry == false }}
@@ -373,8 +383,8 @@ jobs:
               run: |
                   set -euo pipefail
                   bundle_dir="src-tauri/target/x86_64-apple-darwin/release/bundle"
-                  find "$bundle_dir" -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_x86_64_darwin.app.tar.gz"' _ {} \;
-                  find "$bundle_dir" -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_x86_64_darwin.app.tar.gz.sig"' _ {} \;
+                  find "$bundle_dir" -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_x86_64_darwin.app.tar.gz"' _ {} \;
+                  find "$bundle_dir" -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_x86_64_darwin.app.tar.gz.sig"' _ {} \;
 
             # ── Cleanup ──────────────────────────────────────────────────
             - name: Cleanup keychain
@@ -390,7 +400,7 @@ jobs:
               if: ${{ inputs.dry == false }}
               uses: actions/upload-artifact@v4
               with:
-                  name: murmure-macos-intel
+                  name: plumed-macos-intel
                   path: |
                       src-tauri/target/x86_64-apple-darwin/release/bundle/**/*.dmg
                       src-tauri/target/x86_64-apple-darwin/release/bundle/**/*.app.tar.gz

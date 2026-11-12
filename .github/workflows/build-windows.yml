@@ -27,6 +27,10 @@ permissions:
 jobs:
     build-windows:
         runs-on: windows-latest
+        # Plumed: SignPath is optional; without its token the installers are
+        # released unsigned (SmartScreen warning) instead of failing the build.
+        env:
+            HAS_SIGNPATH: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
         steps:
             - uses: actions/checkout@v4
 
@@ -67,9 +71,9 @@ jobs:
               run: |
                   New-Item -ItemType Directory -Force -Path "unsigned_artifacts" | Out-Null
                   $msi = Get-ChildItem -Path "src-tauri/target/release/bundle/msi" -Filter *.msi | Select-Object -First 1
-                  Copy-Item $msi.FullName -Destination "unsigned_artifacts/Murmure_x64.msi"
+                  Copy-Item $msi.FullName -Destination "unsigned_artifacts/Plumed_x64.msi"
                   $exe = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis" -Filter *.exe | Select-Object -First 1
-                  Copy-Item $exe.FullName -Destination "unsigned_artifacts/Murmure_x64-setup.exe"
+                  Copy-Item $exe.FullName -Destination "unsigned_artifacts/Plumed_x64-setup.exe"
 
             - name: Upload unsigned artifact
               if: ${{ inputs.dry == false }}
@@ -82,7 +86,7 @@ jobs:
                   if-no-files-found: error
 
             - name: SignPath Sign
-              if: ${{ inputs.dry == false }}
+              if: ${{ inputs.dry == false && env.HAS_SIGNPATH == 'true' }}
               uses: signpath/github-action-submit-signing-request@v2
               with:
                   api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
@@ -92,6 +96,11 @@ jobs:
                   github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
                   wait-for-completion: true
                   output-artifact-directory: 'signed_artifacts'
+
+            - name: Use unsigned installers (no SignPath)
+              if: ${{ inputs.dry == false && env.HAS_SIGNPATH != 'true' }}
+              shell: pwsh
+              run: Copy-Item -Path "unsigned_artifacts" -Destination "signed_artifacts" -Recurse
 
             - name: Restore Tauri signing key
               if: ${{ inputs.dry == false }}
@@ -115,7 +124,7 @@ jobs:
                   # MSI
                   $msi = Get-ChildItem -Path "signed_artifacts" -Filter *.msi | Select-Object -First 1
                   if ($msi) {
-                      $finalMsi = Join-Path $releaseDir "Murmure_x64.msi"
+                      $finalMsi = Join-Path $releaseDir "Plumed_x64.msi"
                       Copy-Item $msi.FullName -Destination $finalMsi -Force
                       pnpm tauri signer sign $finalMsi
                   }
@@ -123,7 +132,7 @@ jobs:
                   # EXE
                   $exe = Get-ChildItem -Path "signed_artifacts" -Filter *.exe | Select-Object -First 1
                   if ($exe) {
-                      $finalExe = Join-Path $releaseDir "Murmure_x64-setup.exe"
+                      $finalExe = Join-Path $releaseDir "Plumed_x64-setup.exe"
                       Copy-Item $exe.FullName -Destination $finalExe -Force
                       pnpm tauri signer sign $finalExe
                   }
@@ -132,6 +141,6 @@ jobs:
               if: ${{ inputs.dry == false }}
               uses: actions/upload-artifact@v4
               with:
-                  name: murmure-windows-x64
+                  name: plumed-windows-x64
                   path: release-bundle
                   retention-days: 1
