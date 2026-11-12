@@ -3483,6 +3483,7 @@ dependencies = [
  "ort",
  "parking_lot",
  "qrcode",
+ "rayon",
  "rcgen",
  "rdev",
  "regex",

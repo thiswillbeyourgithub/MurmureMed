@@ -15,6 +15,7 @@
 //! replaced by spaces, `n` French plurals, `i` all of them, `s` none.
 
 use once_cell::sync::Lazy;
+use rayon::prelude::*;
 use regex::Regex;
 use std::collections::HashMap;
 
@@ -404,12 +405,21 @@ pub fn expand_augmentations(list: &BoostList, default_augment: &str) -> Vec<Boos
     };
     let mut order: Vec<String> = Vec::new();
     let mut by_phrase: HashMap<String, BoostPhrase> = HashMap::new();
-    for entry in list.phrases.iter().filter(|e| !e.phrase.is_empty()) {
-        let flags = entry.augment.as_deref().unwrap_or(default_augment);
-        let spellings = match flags.is_empty() {
-            true => vec![entry.phrase.clone()],
-            false => augment_variants(&entry.phrase, flags, &prefixes),
-        };
+    // Variants in parallel (the bulk of the work), merged in list order.
+    let expanded: Vec<(&BoostPhrase, Vec<String>)> = list
+        .phrases
+        .par_iter()
+        .filter(|e| !e.phrase.is_empty())
+        .map(|entry| {
+            let flags = entry.augment.as_deref().unwrap_or(default_augment);
+            let spellings = match flags.is_empty() {
+                true => vec![entry.phrase.clone()],
+                false => augment_variants(&entry.phrase, flags, &prefixes),
+            };
+            (entry, spellings)
+        })
+        .collect();
+    for (entry, spellings) in expanded {
         for spelling in spellings {
             match by_phrase.get(&spelling) {
                 Some(prev) if prev.weight.abs() >= entry.weight.abs() => {}

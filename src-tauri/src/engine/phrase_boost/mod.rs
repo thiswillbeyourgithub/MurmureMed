@@ -7,23 +7,30 @@ pub mod list;
 pub mod model;
 pub mod trie;
 
+use rayon::prelude::*;
 use tokenizers::Tokenizer;
 
 use super::helpers::tokenize_word_to_ids;
 use list::{expand_augmentations, parse_boost_list, BoostPhrase};
 pub use trie::{BoostingTrie, EncodedPhrase, NodeId};
 
-/// Tokenize every spelling. Spellings that tokenize to nothing or contain an
-/// unknown token (a character absent from the vocabulary, e.g. CJK) can never
-/// be emitted by the decoder: they are returned apart, to be reported.
+/// Tokenize every spelling, in parallel (a ~77k phrase list expands to ~480k
+/// spellings: 7 s sequentially, 1.5 s on 12 cores). Spellings that tokenize to
+/// nothing or contain an unknown token (a character absent from the
+/// vocabulary, e.g. CJK) can never be emitted by the decoder: they are
+/// returned apart, to be reported.
 pub fn encode_phrases(
     phrases: &[BoostPhrase],
     tokenizer: &Tokenizer,
 ) -> (Vec<EncodedPhrase>, Vec<String>) {
+    let ids: Vec<Option<Vec<i32>>> = phrases
+        .par_iter()
+        .map(|p| tokenize_word_to_ids(tokenizer, &p.phrase))
+        .collect();
     let mut encoded = Vec::with_capacity(phrases.len());
     let mut skipped = Vec::new();
-    for p in phrases {
-        match tokenize_word_to_ids(tokenizer, &p.phrase) {
+    for (p, ids) in phrases.iter().zip(ids) {
+        match ids {
             Some(ids) => encoded.push(EncodedPhrase {
                 ids,
                 weight: p.weight,

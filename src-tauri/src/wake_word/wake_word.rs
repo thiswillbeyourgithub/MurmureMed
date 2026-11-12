@@ -738,9 +738,10 @@ fn transcribe_segment(app: &AppHandle, samples: Vec<f32>) -> anyhow::Result<Stri
                 .get_model_path()
                 .map_err(|e| anyhow::anyhow!("Failed to get model path: {}", e))?;
 
-            let new_engine =
+            let mut new_engine =
                 crate::engine::ParakeetEngine::load_int8(&model_path, model.get_tokenizer_path())
                     .map_err(|e| anyhow::anyhow!("Failed to load model: {}", e))?;
+            crate::medical::phrase_list::arm(&mut new_engine);
 
             *engine_guard = Some(new_engine);
             debug!("Model loaded for wake word detection");
