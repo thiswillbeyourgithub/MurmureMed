@@ -209,14 +209,14 @@ jobs:
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_aarch64_darwin.dmg"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_aarch64_darwin.dmg"' _ {} \;
 
             - name: Rename .app.tar.gz files
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_aarch64_darwin.app.tar.gz"' _ {} \;
-                  find src-tauri/target/release/bundle -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_aarch64_darwin.app.tar.gz.sig"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_aarch64_darwin.app.tar.gz"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_aarch64_darwin.app.tar.gz.sig"' _ {} \;
 
             # ── Cleanup ──────────────────────────────────────────────────
             - name: Cleanup keychain
@@ -232,7 +232,7 @@ jobs:
               if: ${{ inputs.dry == false }}
               uses: actions/upload-artifact@v4
               with:
-                  name: murmure-macos
+                  name: plumed-macos
                   path: |
                       src-tauri/target/release/bundle/**/*.dmg
                       src-tauri/target/release/bundle/**/*.app.tar.gz

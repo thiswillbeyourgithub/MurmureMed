@@ -70,7 +70,7 @@ jobs:
                   echo "ORT_LIB_LOCATION=$dest/lib" >> "$GITHUB_ENV"
                   echo "ORT_PREFER_DYNAMIC_LINK=1" >> "$GITHUB_ENV"
                   echo "ORT_SO_PATH=$dest/lib/libonnxruntime.so.${version}" >> "$GITHUB_ENV"
-                  echo 'RUSTFLAGS=-C link-arg=-Wl,-rpath,$ORIGIN/../lib/murmure' >> "$GITHUB_ENV"
+                  echo 'RUSTFLAGS=-C link-arg=-Wl,-rpath,$ORIGIN/../lib/Plumed' >> "$GITHUB_ENV"
 
             - name: Download & extract ONNX model (Linux)
               if: ${{ inputs.dry == false }}
@@ -88,7 +88,7 @@ jobs:
               env:
                   LD_LIBRARY_PATH: ${{ env.ORT_LIB_LOCATION }}
               run: |
-                  lib="{\"/usr/lib/murmure/libonnxruntime.so.1\":\"${ORT_SO_PATH}\"}"
+                  lib="{\"/usr/lib/Plumed/libonnxruntime.so.1\":\"${ORT_SO_PATH}\"}"
                   config="{\"bundle\":{\"linux\":{\"deb\":{\"files\":${lib}},\"rpm\":{\"files\":${lib}},\"appimage\":{\"files\":${lib}}}}}"
                   pnpm tauri build ${{ inputs.dry && '--no-bundle' || '--bundles appimage,deb,rpm' }} --config "$config"
 
@@ -102,7 +102,7 @@ jobs:
                     "$APPIMAGE" --appimage-extract
                     cd squashfs-root
                     rm -f .DirIcon
-                    ln -s murmure.png .DirIcon
+                    ln -s plumed.png .DirIcon
                     cd ..
                     wget --https-only -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
                     chmod +x appimagetool-x86_64.AppImage
@@ -162,22 +162,22 @@ jobs:
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.AppImage" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_amd64.AppImage"' _ {} \;
-                  find src-tauri/target/release/bundle -name "*.AppImage.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_amd64.AppImage.sig"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.AppImage" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_amd64.AppImage"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.AppImage.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_amd64.AppImage.sig"' _ {} \;
 
             - name: Rename deb files
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.deb" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_amd64.deb"' _ {} \;
-                  find src-tauri/target/release/bundle -name "*.deb.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_amd64.deb.sig"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.deb" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_amd64.deb"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.deb.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_amd64.deb.sig"' _ {} \;
 
             - name: Rename rpm files
               if: ${{ inputs.dry == false }}
               shell: bash
               run: |
-                  find src-tauri/target/release/bundle -name "*.rpm" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_amd64.rpm"' _ {} \;
-                  find src-tauri/target/release/bundle -name "*.rpm.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_amd64.rpm.sig"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.rpm" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_amd64.rpm"' _ {} \;
+                  find src-tauri/target/release/bundle -name "*.rpm.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_amd64.rpm.sig"' _ {} \;
 
             - name: Build Arch package
               if: ${{ inputs.dry == false }}
@@ -186,12 +186,12 @@ jobs:
                   STAGING="${{ runner.temp }}/archpkg"
                   mkdir -p "$STAGING"
                   cp packaging/aur/PKGBUILD packaging/aur/murmure.install "$STAGING/"
-                  cp "$(find src-tauri/target/release/bundle -name 'Murmure_amd64.deb')" "$STAGING/"
+                  cp "$(find src-tauri/target/release/bundle -name 'Plumed_amd64.deb')" "$STAGING/"
                   VERSION=$(node -p "require('./package.json').version")
                   sed -i "s/@VERSION@/$VERSION/" "$STAGING/PKGBUILD"
                   docker run --rm -v "$STAGING":/build archlinux:base-devel bash -c "useradd -m builder && chown -R builder /build && su builder -c 'cd /build && makepkg --noconfirm --nodeps' && chown -R $(id -u):$(id -g) /build"
                   mkdir -p src-tauri/target/release/bundle/pacman
-                  mv "$STAGING"/murmure-*.pkg.tar.zst src-tauri/target/release/bundle/pacman/Murmure_amd64.pkg.tar.zst
+                  mv "$STAGING"/plumed-*.pkg.tar.zst src-tauri/target/release/bundle/pacman/Plumed_amd64.pkg.tar.zst
 
             - name: Sign Arch package with Tauri signer
               if: ${{ inputs.dry == false }}
@@ -211,7 +211,7 @@ jobs:
               if: ${{ inputs.dry == false }}
               uses: actions/upload-artifact@v4
               with:
-                  name: murmure-linux
+                  name: plumed-linux
                   path: |
                       src-tauri/target/release/bundle/**/*.AppImage
                       src-tauri/target/release/bundle/**/*.deb

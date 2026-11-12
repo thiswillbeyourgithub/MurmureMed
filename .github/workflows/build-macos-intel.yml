@@ -227,7 +227,7 @@ jobs:
                     echo "::error::No .app bundle found in src-tauri/target/x86_64-apple-darwin/release/bundle/macos"
                     exit 1
                   fi
-                  bin="$app/Contents/MacOS/murmure"
+                  bin="$app/Contents/MacOS/plumed"
                   file "$bin"
                   file "$app/Contents/Frameworks/libonnxruntime.1.23.2.dylib"
 
@@ -365,7 +365,7 @@ jobs:
               run: |
                   set -euo pipefail
                   bundle_dir="src-tauri/target/x86_64-apple-darwin/release/bundle"
-                  find "$bundle_dir" -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_x86_64_darwin.dmg"' _ {} \;
+                  find "$bundle_dir" -name "*.dmg" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_x86_64_darwin.dmg"' _ {} \;
 
             - name: Rename .app.tar.gz files to Intel suffix
               if: ${{ inputs.dry == false }}
@@ -373,8 +373,8 @@ jobs:
               run: |
                   set -euo pipefail
                   bundle_dir="src-tauri/target/x86_64-apple-darwin/release/bundle"
-                  find "$bundle_dir" -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_x86_64_darwin.app.tar.gz"' _ {} \;
-                  find "$bundle_dir" -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Murmure_x86_64_darwin.app.tar.gz.sig"' _ {} \;
+                  find "$bundle_dir" -name "*.app.tar.gz" ! -name "*.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_x86_64_darwin.app.tar.gz"' _ {} \;
+                  find "$bundle_dir" -name "*.app.tar.gz.sig" -exec sh -c 'mv "$1" "$(dirname "$1")/Plumed_x86_64_darwin.app.tar.gz.sig"' _ {} \;
 
             # ── Cleanup ──────────────────────────────────────────────────
             - name: Cleanup keychain
@@ -390,7 +390,7 @@ jobs:
               if: ${{ inputs.dry == false }}
               uses: actions/upload-artifact@v4
               with:
-                  name: murmure-macos-intel
+                  name: plumed-macos-intel
                   path: |
                       src-tauri/target/x86_64-apple-darwin/release/bundle/**/*.dmg
                       src-tauri/target/x86_64-apple-darwin/release/bundle/**/*.app.tar.gz
