@@ -28,7 +28,7 @@ pub enum ChunkOutcome {
 
 const INFERENCE_SILENCE_PAD_SECS: f32 = 0.25;
 
-fn pad_with_silence(samples: &[f32], sample_rate: u32) -> Vec<f32> {
+pub(crate) fn pad_with_silence(samples: &[f32], sample_rate: u32) -> Vec<f32> {
     let silence = vec![0.0; (INFERENCE_SILENCE_PAD_SECS * sample_rate as f32) as usize];
     let mut padded = Vec::with_capacity(samples.len() + silence.len() * 2);
     padded.extend_from_slice(&silence);

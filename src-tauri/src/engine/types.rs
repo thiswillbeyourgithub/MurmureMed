@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use tokenizers::Tokenizer;
 
 use super::boost_tree::BoostTree;
+use super::phrase_boost::BoostingTrie;
 
 pub type DecoderState = (Array3<f32>, Array3<f32>);
 
@@ -46,6 +47,8 @@ pub struct ParakeetModel {
     /// Sorted word list the current boost tree was built from, to skip
     /// rebuilding when the dictionary has not changed between transcriptions.
     pub boost_words: Vec<String>,
+    /// Phrase list trie (MurmureMed), boosted on top of the dictionary.
+    pub phrase_trie: Option<BoostingTrie>,
 }
 
 #[derive(Debug, Clone, PartialEq)]

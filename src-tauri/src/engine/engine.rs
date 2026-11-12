@@ -12,6 +12,7 @@ use std::path::Path;
 
 use super::boost_tree::{BiasCandidate, BoostTree};
 use super::helpers::{load_tokenizer, tokenize_word_to_ids, word_variants};
+use super::phrase_boost::{add_phrase_bonuses, BoostingTrie};
 use super::types::{DecoderState, ParakeetError, ParakeetModel, TimestampedResult};
 
 /// Tokens, frame timestamps and raw-logit probabilities of one decoded
@@ -177,6 +178,7 @@ impl ParakeetModel {
             boost_tree: None,
             boost_alpha: BOOST_ALPHA_MAX,
             boost_words: Vec::new(),
+            phrase_trie: None,
         })
     }
 
@@ -554,7 +556,7 @@ impl ParakeetModel {
         // Logit boosting only runs when a boost tree is active. With no boost
         // tree the greedy path must stay bit-exact (default path, streaming),
         // so it lives in its own function with no boost code on it.
-        if self.boost_tree.is_some() {
+        if self.boost_tree.is_some() || self.phrase_trie.is_some() {
             let boosted = self.decode_sequence_boosted(encodings, encodings_len)?;
             // Encoder already ran: replay the light greedy decode and use it
             // when the boost diverged too far (flipped language). A genuine
@@ -649,13 +651,12 @@ impl ParakeetModel {
         encodings: &ArrayViewD<f32>,
         encodings_len: usize,
     ) -> Result<DecodedSequence, ParakeetError> {
-        let tree = match self.boost_tree.take() {
-            Some(tree) => tree,
-            None => return self.decode_sequence_greedy(encodings, encodings_len),
-        };
-
-        let result = self.run_boosted_decode(encodings, encodings_len, &tree);
-        self.boost_tree = Some(tree);
+        let tree = self.boost_tree.take();
+        let trie = self.phrase_trie.take();
+        let result =
+            self.run_boosted_decode(encodings, encodings_len, tree.as_ref(), trie.as_ref());
+        self.boost_tree = tree;
+        self.phrase_trie = trie;
         result
     }
 
@@ -663,7 +664,8 @@ impl ParakeetModel {
         &mut self,
         encodings: &ArrayViewD<f32>,
         encodings_len: usize,
-        tree: &BoostTree,
+        tree: Option<&BoostTree>,
+        trie: Option<&BoostingTrie>,
     ) -> Result<DecodedSequence, ParakeetError> {
         let mut prev_state = self.create_decoder_state()?;
         let mut tokens: Vec<i32> = Vec::new();
@@ -672,7 +674,8 @@ impl ParakeetModel {
 
         let mut t = 0;
         let mut emitted_tokens = 0;
-        let mut boost_state = tree.root();
+        let mut boost_state = tree.map_or(0, BoostTree::root);
+        let mut active = trie.map_or_else(Vec::new, BoostingTrie::start);
 
         while t < encodings_len {
             let encoder_step = encodings.slice(ndarray::s![t, ..]);
@@ -682,7 +685,7 @@ impl ParakeetModel {
                 self.decode_step(&tokens, &prev_state, &encoder_step_dyn.view())?;
             let (vocab_logits, dur_logits) = Self::tdt_logits(&probs, self.vocab_size)?;
 
-            let candidates = tree.bias(boost_state);
+            let candidates = tree.map_or_else(Vec::new, |tree| tree.bias(boost_state));
             let mut boosted = vocab_logits.to_vec();
             if !candidates.is_empty() {
                 let tight = top_k_threshold(vocab_logits, BOOST_TOP_K);
@@ -702,6 +705,9 @@ impl ParakeetModel {
                     }
                 }
             }
+            if let Some(trie) = trie {
+                add_phrase_bonuses(trie, vocab_logits, &active, self.blank_idx, &mut boosted);
+            }
             let token = argmax_token(&boosted, self.blank_idx);
             if log::log_enabled!(log::Level::Trace)
                 && token != self.blank_idx
@@ -718,7 +724,12 @@ impl ParakeetModel {
                 tokens.push(token);
                 timestamps.push(t);
                 emitted_tokens += 1;
-                boost_state = tree.advance(boost_state, token);
+                if let Some(tree) = tree {
+                    boost_state = tree.advance(boost_state, token);
+                }
+                if let Some(trie) = trie {
+                    active = trie.advance(&active, token);
+                }
             }
 
             let duration = argmax_index(dur_logits);
