@@ -1,9 +1,9 @@
 import { ExternalLink } from '@/components/external-link';
 import { useTranslation } from '@/i18n';
 
-// MurmureMed fork credits (written with Claude Code). The text lives here in
+// Plumed fork credits (written with Claude Code). The text lives here in
 // both languages rather than in fr.json, so upstream locale files stay
-// untouched and the MurmureMed renaming of translated strings cannot alter
+// untouched and the Plumed renaming of translated strings cannot alter
 // the sentences that name the original Murmure.
 
 const PARAKEET_WEB = 'https://github.com/thiswillbeyourgithub/parakeet_web';
@@ -23,7 +23,7 @@ interface CreditsText {
 const TEXT: Record<'fr' | 'en', CreditsText> = {
     en: {
         intro: [
-            'MurmureMed is a fork of Murmure for French medical dictation, made by ',
+            'Plumed is a fork of Murmure for French medical dictation, made by ',
             ', psychiatrist and developer. It adds the medical mode of ',
             '.',
         ],
@@ -35,7 +35,7 @@ const TEXT: Record<'fr' | 'en', CreditsText> = {
     },
     fr: {
         intro: [
-            'MurmureMed est un fork de Murmure dédié à la dictée médicale en français, réalisé par ',
+            'Plumed est un fork de Murmure dédié à la dictée médicale en français, réalisé par ',
             ', psychiatre et développeur. Il reprend le mode médical de ',
             '.',
         ],
@@ -57,7 +57,7 @@ export const ForkCredits = () => {
 
     return (
         <section className="w-full space-y-3 rounded-2xl border-2 border-border/60 bg-background/50 p-5 text-left text-sm text-muted-foreground">
-            <h2 className="text-center text-xl font-semibold tracking-tight text-foreground">MurmureMed</h2>
+            <h2 className="text-center text-xl font-semibold tracking-tight text-foreground">Plumed</h2>
             <p>
                 {text.intro[0]}
                 <ExternalLink href={`https://olicorne.org/${lang}`} withIcon={false}>

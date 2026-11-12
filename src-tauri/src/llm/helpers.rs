@@ -10,7 +10,8 @@ use std::{
 use tauri::{AppHandle, Manager};
 use url::{Host, Url};
 
-const KEYRING_SERVICE: &str = "murmure";
+// Plumed: own keyring entry, so it never reads or overwrites the API key of an installed Murmure.
+const KEYRING_SERVICE: &str = "plumed";
 const KEYRING_REMOTE_API_KEY: &str = "remote_api_key";
 
 /// Default prompt for the "General" mode when no prompt is configured.

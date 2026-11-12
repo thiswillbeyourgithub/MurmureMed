@@ -47,7 +47,7 @@ pub struct ParakeetModel {
     /// Sorted word list the current boost tree was built from, to skip
     /// rebuilding when the dictionary has not changed between transcriptions.
     pub boost_words: Vec<String>,
-    /// Phrase list trie (MurmureMed), boosted on top of the dictionary.
+    /// Phrase list trie (Plumed), boosted on top of the dictionary.
     pub phrase_trie: Option<BoostingTrie>,
 }
 

@@ -1,7 +1,7 @@
 import { ShieldCheck } from 'lucide-react';
 import { useTranslation } from '@/i18n';
 
-// MurmureMed fork (written with Claude Code): states on the home page that
+// Plumed fork (written with Claude Code): states on the home page that
 // medical dictation stays on the computer. Text kept here in both languages
 // so upstream locale files stay untouched. The exception is real: Prompt
 // Mode can send transcripts to a remote server the user configures (behind

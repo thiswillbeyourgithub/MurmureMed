@@ -1,4 +1,4 @@
-//! Drug-name and medical-term fix rules (MurmureMed fork).
+//! Drug-name and medical-term fix rules (Plumed fork).
 //!
 //! Port of ParakeetWeb's `app/ui/src/lib/drugRules.js`: ~40,000 regexes that
 //! fix how French speech recognition mishears drug names and medical terms

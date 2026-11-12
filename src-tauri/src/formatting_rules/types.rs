@@ -92,7 +92,7 @@ pub struct BuiltInOptions {
     pub text_numbers_language: String,
     /// Threshold for text-to-number conversion (0.0 to 1.0)
     pub text_numbers_threshold: f64,
-    /// MurmureMed: fix French drug names and medical terms (bundled rules)
+    /// Plumed: fix French drug names and medical terms (bundled rules)
     pub medical_fixes: bool,
 }
 
@@ -118,7 +118,7 @@ pub struct FormattingSettings {
 }
 
 impl Default for FormattingSettings {
-    /// MurmureMed: a fresh install starts with InterHop's medical dictation rules.
+    /// Plumed: a fresh install starts with InterHop's medical dictation rules.
     fn default() -> Self {
         Self {
             built_in: BuiltInOptions::default(),

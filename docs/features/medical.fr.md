@@ -1,6 +1,6 @@
-# Dictée médicale (MurmureMed)
+# Dictée médicale (Plumed)
 
-Fonctionnalités propres au fork MurmureMed, absentes de Murmure.
+Fonctionnalités propres au fork Plumed, absentes de Murmure.
 
 ## Correction des noms de médicaments et des termes médicaux
 
@@ -21,7 +21,7 @@ Ces modifications sont enregistrées à part (`medical_rules.json`), séparémen
 
 L'association [InterHop](https://interhop.org/) maintient des règles de dictée médicale pour Murmure (unités, constantes, ponctuation dictée, modèles d'examen déclenchés par « ajoute la commande ... ») : [framagit.org/interhop/murmure-regex](https://framagit.org/interhop/murmure-regex). Par exemple « tension 120 80 » devient « TA : 120/80 » et « 3 fois par jour » devient « 3/j ».
 
-Une nouvelle installation de MurmureMed les contient déjà dans **Personnaliser > Règles de formatage**, comme règles personnalisées ordinaires : vous pouvez les modifier, les désactiver ou les supprimer, et ajouter les vôtres. Elles s'appliquent après la correction des médicaments.
+Une nouvelle installation de Plumed les contient déjà dans **Personnaliser > Règles de formatage**, comme règles personnalisées ordinaires : vous pouvez les modifier, les désactiver ou les supprimer, et ajouter les vôtres. Elles s'appliquent après la correction des médicaments.
 
 Sur une installation existante (ou après les avoir supprimées), vous pouvez les importer :
 

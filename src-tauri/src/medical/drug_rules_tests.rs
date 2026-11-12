@@ -252,12 +252,12 @@ fn every_bundled_rule_compiles() {
 }
 
 /// Differential test against ParakeetWeb on a whole corpus: set
-/// `MURMUREMED_DRUG_PARITY` to a JSON-lines file of `{"in": ..., "out": ...}`
+/// `PLUMED_DRUG_PARITY` to a JSON-lines file of `{"in": ..., "out": ...}`
 /// produced by ParakeetWeb's `applyDrugRules`.
 #[test]
 #[ignore]
 fn bundled_rules_match_parakeetweb_corpus() {
-    let Ok(path) = std::env::var("MURMUREMED_DRUG_PARITY") else {
+    let Ok(path) = std::env::var("PLUMED_DRUG_PARITY") else {
         return;
     };
     let r = bundled();

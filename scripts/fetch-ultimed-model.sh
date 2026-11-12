@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# MurmureMed fork: fetch the UltiMed fine-tuned Parakeet model (int8 ONNX) into
+# Plumed fork: fetch the UltiMed fine-tuned Parakeet model (int8 ONNX) into
 # resources/parakeet-tdt-0.6b-v3-int8/, the folder the app loads its model from
 # (MODEL_FILENAME in src-tauri/src/model/model.rs). The folder keeps upstream's name so
 # no Rust code changes, even though it now holds UltiMed instead of the stock model.

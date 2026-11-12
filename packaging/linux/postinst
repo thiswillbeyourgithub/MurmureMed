@@ -1,6 +1,6 @@
 #!/bin/sh
 # Murmure .deb post-install hook:
-#   - Migrate legacy murmure.desktop to org.olicorne.murmuremed.desktop.
+#   - Migrate legacy murmure.desktop to org.olicorne.plumed.desktop.
 #   - Reload udev rules so the /dev/uinput ACL shipped in
 #     60-murmure-uinput.rules applies without requiring a reboot.
 #     Murmure writes directly to /dev/uinput for Wayland paste;
@@ -8,7 +8,7 @@
 set -e
 
 SRC=/usr/share/applications/murmure.desktop
-DEST=/usr/share/applications/org.olicorne.murmuremed.desktop
+DEST=/usr/share/applications/org.olicorne.plumed.desktop
 if [ -f "$SRC" ]; then
     mv -f "$SRC" "$DEST"
 fi
