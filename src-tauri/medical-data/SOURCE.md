@@ -33,7 +33,7 @@ InterHop's French medical dictation rules (138 regexes: units, vital signs, dict
 
 - Source: https://framagit.org/interhop/murmure-regex (`regex.csv`). The commit is in `interhop/PROVENANCE`.
 - `rules.json` is generated from `regex.csv` by InterHop's own converter (`convert_csv_to_murmure.py`, loaded from the clone): same parsing, same skipped rows, same ids as their `config.murmure`. Each rule keeps its example, and the Rust tests check that every example gives the expected text, alone and with all the rules together.
-- License: TODO. The repository has no license file; the MurmureMed maintainer is clarifying this with InterHop.
+- License: AGPL-3.0 (the rules were written by the MurmureMed maintainer, who added the license file to the repository).
 
 ### Refresh
 
