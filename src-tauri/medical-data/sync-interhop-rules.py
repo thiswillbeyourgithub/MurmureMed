@@ -7,7 +7,7 @@ https://framagit.org/interhop/murmure-regex (written with Claude Code).
 Reads the clone's regex.csv with the clone's own converter
 (convert_csv_to_murmure.py: same parsing, same skipped rows, same ids as its
 config.murmure), and writes interhop/rules.json: one object per rule with its
-id, trigger, replacement and example. MurmureMed seeds these as the default
+id, trigger, replacement and example. Plumed seeds these as the default
 formatting rules of a fresh install; the Rust tests check every example.
 """
 

@@ -1,12 +1,12 @@
-# MurmureMed fork instructions
+# Plumed fork instructions
 
-These instructions come from the MurmureMed maintainer and apply on top of [AGENTS.md](AGENTS.md) (the upstream Murmure guidelines, which still apply). Where the two conflict, this file wins.
+These instructions come from the Plumed maintainer and apply on top of [AGENTS.md](AGENTS.md) (the upstream Murmure guidelines, which still apply). Where the two conflict, this file wins.
 
 This file was set up with Claude Code.
 
 ## 1. What this fork is
 
-MurmureMed is a fork of [Murmure](https://github.com/Kieirra/murmure) specialized for **French medical dictation**. It ports the features of the medical mode of ParakeetWeb ([live](http://parakeetweb.olicorne.org/?mode=med), [code](https://github.com/thiswillbeyourgithub/parakeet_web), usually checked out next to this repo in `../parakeet_web`) into an easy to install desktop app, so dictation works in any application of the computer, not only in a browser.
+Plumed is a fork of [Murmure](https://github.com/Kieirra/murmure) specialized for **French medical dictation**. It ports the features of the medical mode of ParakeetWeb ([live](http://parakeetweb.olicorne.org/?mode=med), [code](https://github.com/thiswillbeyourgithub/parakeet_web), usually checked out next to this repo in `../parakeet_web`) into an easy to install desktop app, so dictation works in any application of the computer, not only in a browser.
 
 Why a fork and not upstream PRs: see [Kieirra/murmure#498](https://github.com/Kieirra/murmure/issues/498). The upstream maintainer prefers that very large rule lists (~30,000 regex rules) and medical specific post-processing live in a fork. We still want to stay as close to upstream as possible and upstream every change that is generic enough.
 
@@ -80,7 +80,7 @@ Caveat: Windows Installer ignores the fourth number when deciding whether an MSI
 
 ## 6. Releases
 
-Identity: the app identifier is `org.olicorne.murmuremed` (own settings and history folder, separate from an installed Murmure). The product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too.
+Identity: the app identifier is `org.olicorne.plumed` (own settings and history folder, separate from an installed Murmure). The product and binary name are still upstream's `murmure`, so the Linux `.deb` package has the same name as Murmure's and replaces it, and the macOS `.app` and Windows install folder collide with Murmure's too.
 
 Auto-updater (`plugins.updater` in `src-tauri/tauri.conf.json`): the app downloads `latest.json` from our latest GitHub release and only installs an update whose signature matches the `pubkey` in that file. One-time setup:
 
@@ -90,7 +90,7 @@ Auto-updater (`plugins.updater` in `src-tauri/tauri.conf.json`): the app downloa
 
 Each release: run the `Release Murmure` workflow, create a GitHub release from its artifacts, and upload a `latest.json` listing, per platform, the installer URL and the content of its `.sig` (format: https://v2.tauri.app/plugin/updater/#static-json-file). Upstream writes it by hand; the workflows do not generate it.
 
-WinGet (`.github/workflows/publish-winget.yml`, id `Olicorne.MurmureMed`, NSIS `-setup.exe` only): it runs on every published release, but it can only update a package that already exists in microsoft/winget-pkgs. The first version must be submitted once by hand (for example with `komac new` or `wingetcreate new`), then add a `WINGET_TOKEN` secret (a GitHub token allowed to open PRs on winget-pkgs).
+WinGet (`.github/workflows/publish-winget.yml`, id `Olicorne.Plumed`, NSIS `-setup.exe` only): it runs on every published release, but it can only update a package that already exists in microsoft/winget-pkgs. The first version must be submitted once by hand (for example with `komac new` or `wingetcreate new`), then add a `WINGET_TOKEN` secret (a GitHub token allowed to open PRs on winget-pkgs).
 
 ## 7. Other
 

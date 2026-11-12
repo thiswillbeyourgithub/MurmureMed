@@ -1,4 +1,4 @@
-# Bundled French medical data (MurmureMed fork)
+# Bundled French medical data (Plumed fork)
 
 ## regex-fixes/
 
@@ -22,7 +22,7 @@ Then check that the Rust port still gives exactly ParakeetWeb's output (`app/ui/
 ```bash
 # in ParakeetWeb: one {"in", "out"} JSON line per text of a corpus, through compileDrugRuleSource + applyDrugRules
 # then, in src-tauri/:
-MURMUREMED_DRUG_PARITY=/path/to/parity.jsonl cargo test --release --lib medical -- --ignored
+PLUMED_DRUG_PARITY=/path/to/parity.jsonl cargo test --release --lib medical -- --ignored
 ```
 
 That also checks that every rule still parses and compiles.
@@ -33,7 +33,7 @@ InterHop's French medical dictation rules (138 regexes: units, vital signs, dict
 
 - Source: https://framagit.org/interhop/murmure-regex (`regex.csv`). The commit is in `interhop/PROVENANCE`.
 - `rules.json` is generated from `regex.csv` by InterHop's own converter (`convert_csv_to_murmure.py`, loaded from the clone): same parsing, same skipped rows, same ids as their `config.murmure`. Each rule keeps its example, and the Rust tests check that every example gives the expected text, alone and with all the rules together.
-- License: AGPL-3.0 (the rules were written by the MurmureMed maintainer, who added the license file to the repository).
+- License: AGPL-3.0 (the rules were written by the Plumed maintainer, who added the license file to the repository).
 
 ### Refresh
 
@@ -47,7 +47,7 @@ cd .. && cargo test --lib interhop
 
 French medical phrase boosting list (~77,000 phrases: drugs, medical terms, LoRN bacteria names, dosage units), loaded into the decoder at model load by `src-tauri/src/medical/phrase_list.rs`. During decoding it nudges the model toward these phrases (ParakeetWeb's trie engine, `src-tauri/src/engine/phrase_boost/`), on top of the user dictionary.
 
-- Copy of ParakeetWeb's `phrase_boosting/french_medical.txt` (https://github.com/thiswillbeyourgithub/parakeet_web) with only its first line, the defaults line, replaced by MurmureMed's tuning (`#!commitment 0` and min-p 0.01, chosen by the benchmark in `AGENTS.FORK.md`). The source commit and SHA-256 are in `phrase-boosting/PROVENANCE`. Do not edit it here: list improvements go to ParakeetWeb.
+- Copy of ParakeetWeb's `phrase_boosting/french_medical.txt` (https://github.com/thiswillbeyourgithub/parakeet_web) with only its first line, the defaults line, replaced by Plumed's tuning (`#!commitment 0` and min-p 0.01, chosen by the benchmark in `AGENTS.FORK.md`). The source commit and SHA-256 are in `phrase-boosting/PROVENANCE`. Do not edit it here: list improvements go to ParakeetWeb.
 - License: AGPL-3.0, like ParakeetWeb, except the bacterial names merged in from LPSN (List of Prokaryotic names with Standing in Nomenclature, https://lpsn.dsmz.de/), which stay under CC BY-SA 4.0 (see ParakeetWeb's `ATTRIBUTION.md`). Required attribution: Parte, A.C., Sardà Carbasse, J., Meier-Kolthoff, J.P., Reimer, L.C. & Göker, M. (2020). List of Prokaryotic names with Standing in Nomenclature (LPSN) moves to the DSMZ. International Journal of Systematic and Evolutionary Microbiology 70, 5607-5612. https://doi.org/10.1099/ijsem.0.004332
 
 ### Refresh

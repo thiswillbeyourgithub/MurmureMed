@@ -5,7 +5,7 @@
 #   ./sync-phrase-list.sh [path/to/parakeet_web]
 #
 # Copies phrase_boosting/french_medical.txt with its first line (the defaults
-# line, `*:1.5::fhpn`) replaced by MurmureMed's tuning, and records the source
+# line, `*:1.5::fhpn`) replaced by Plumed's tuning, and records the source
 # commit and sha256 in phrase-boosting/PROVENANCE.
 # Written with Claude Code.
 set -eu
