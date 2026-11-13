@@ -104,6 +104,8 @@ jobs:
                     rm -f .DirIcon
                     ln -s plumed.png .DirIcon
                     cd ..
+                    # appimagetool now refuses AppDirs with 0700 folders (the extract keeps them).
+                    chmod -R a+rX squashfs-root
                     wget --https-only -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
                     chmod +x appimagetool-x86_64.AppImage
                     ARCH=x86_64 ./appimagetool-x86_64.AppImage squashfs-root "$APPIMAGE"
