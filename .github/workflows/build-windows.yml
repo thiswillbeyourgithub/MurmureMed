@@ -38,7 +38,11 @@ jobs:
               with:
                   node-version: lts/*
 
+            # Plumed: Rust 1.100's cargo build-dir layout (build/<crate>/<hash>/out) breaks
+            # ort-sys 2.0.0-rc.11's DLL copy on Windows; keep 1.99 until ort is upgraded.
             - uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7
+              with:
+                  toolchain: 1.99.1
 
             - uses: swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5
               with:
